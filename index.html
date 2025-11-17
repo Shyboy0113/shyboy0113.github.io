@@ -3,9 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <title>Hong Ki Tae Portfolio</title>
+
+  <style>
+    /* 화면 전체 가운데 정렬 */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    /* 전체 레이아웃: 왼쪽 사진 + 오른쪽 내용 */
+    .container {
+      display: flex;
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      width: 70%;
+      max-width: 900px;
+    }
+
+    /* 왼쪽 프로필 이미지 */
+    .profile-img {
+      width: 180px;
+      height: 220px;
+      background-color: #ddd; /* 이미지 없을 때 회색 박스 */
+      border-radius: 10px;
+      margin-right: 40px;
+      object-fit: cover;
+    }
+
+    /* 오른쪽 글 영역 */
+    .content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    h1 {
+      margin: 0 0 15px;
+    }
+  </style>
+
 </head>
 <body>
-  <h1>Welcome!</h1>
-  <p>This is my portfolio homepage.</p>
+
+  <div class="container">
+    <!-- 왼쪽 프로필 사진 -->
+    <img class="profile-img" src="your_photo.jpg" alt="Profile Photo">
+
+    <!-- 오른쪽 메인 콘텐츠 -->
+    <div class="content">
+      <h1>Hong Ki Tae</h1>
+      <p>This is my portfolio homepage.</p>
+      <p>Put your introduction, skills, project links, etc.</p>
+    </div>
+  </div>
+
 </body>
 </html>
