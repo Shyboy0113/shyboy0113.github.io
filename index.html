@@ -5,18 +5,20 @@
   <title>Hong Ki Tae Portfolio</title>
 
   <style>
-    /* 화면 전체 가운데 정렬 */
     body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
       margin: 0;
       font-family: Arial, sans-serif;
       background-color: #f5f5f5;
+
+      /* ❗ 중앙 정렬 강제 제거 → 자연스럽게 위에서 아래로 나열됨 */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 50px;
+      padding-bottom: 50px;
     }
 
-    /* 전체 레이아웃: 왼쪽 사진 + 오른쪽 내용 */
+    /* 공통 박스 레이아웃 */
     .container {
       display: flex;
       background: white;
@@ -25,19 +27,19 @@
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       width: 70%;
       max-width: 900px;
+      margin-bottom: 30px;
     }
 
-    /* 왼쪽 프로필 이미지 */
+    /* 프로필 이미지 */
     .profile-img {
       width: 180px;
       height: 220px;
-      background-color: #ddd; /* 이미지 없을 때 회색 박스 */
+      background-color: #ddd;
       border-radius: 10px;
       margin-right: 40px;
       object-fit: cover;
     }
 
-    /* 오른쪽 글 영역 */
     .content {
       display: flex;
       flex-direction: column;
@@ -47,40 +49,13 @@
     h1 {
       margin: 0 0 15px;
     }
-  </style>
 
-</head>
-<body>
+    /* 아래 링크 박스 전용 스타일 */
+    .link-container {
+      flex-direction: column;
+      text-align: center;
+    }
 
-  <div class="container">
-    <!-- 왼쪽 프로필 사진 -->
-    <img class="profile-img" src="profile.jpg" alt="Profile Photo">
-
-    <!-- 오른쪽 메인 콘텐츠 -->
-    <div class="content">
-      <h1>Hong Ki Tae</h1>
-      <p>This is my portfolio homepage.</p>
-      <p>Put your introduction, skills, project links, etc.</p>
-    </div>
-  </div>
-
-    <!-- 아래쪽 링크 영역 -->
-  <div class="container" style="margin-top: 30px; flex-direction: column; text-align: center;">
-    <h2>Links</h2>
-
-    <p>
-      🔗 <a href="https://pokemon.hongkitaeportfolio.com" target="_blank">
-        Pokemon 총무 포트폴리오 보기
-      </a>
-    </p>
-
-    <p>
-      🐙 <a href="https://github.com/Shyboy0113" target="_blank">
-        GitHub Repository 방문하기
-      </a>
-    </p>
-  </div>
-
-
-</body>
-</html>
+    .link-container a {
+      font-size: 18px;
+      text-decoration: none;
