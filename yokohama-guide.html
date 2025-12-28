@@ -15,7 +15,7 @@
     }
     .guide-card { 
       background: white; 
-      max-width: 700px; 
+      max-width: 750px; 
       width: 100%; 
       padding: 40px; 
       border-radius: 20px; 
@@ -29,17 +29,17 @@
     .station-info { background: #fdfafb; padding: 20px; border-radius: 12px 12px 0 0; border: 1px solid #ffeef1; border-bottom: none; }
     .station-info h3 { margin-top: 0; color: #d63384; }
     
-    /* 구글 맵 컨테이너 */
+    /* 지도 컨테이너 스타일 */
     .map-container {
       width: 100%;
-      height: 300px;
+      height: 350px;
       border-radius: 0 0 12px 12px;
       overflow: hidden;
       border: 1px solid #ffeef1;
     }
-    iframe { width: 100%; height: 100%; border: none; }
+    .map-container iframe { width: 100%; height: 100%; border: 0; }
 
-    .tip { background: #2b3a55; color: white; padding: 20px; border-radius: 12px; margin-top: 20px; }
+    .tip { background: #2b3a55; color: white; padding: 20px; border-radius: 12px; margin-top: 20px; line-height: 1.6; }
   </style>
 </head>
 <body>
@@ -47,30 +47,50 @@
   <div class="guide-card">
     <a href="index.html" class="back-link">← 메인 페이지로 돌아가기</a>
     <h1>🚞 요코하마 국립대 교통 가이드</h1>
+    
+    <div class="station-section">
+      <div class="station-info">
+        <h3>1. 미쓰자와카미초 역 (블루라인)</h3>
+        <p>정문까지 도보 약 15분. 지하철 이용 시 가장 보편적인 경로입니다.</p>
+      </div>
+      <div class="map-container">
+        <iframe src="https://maps.google.com/?cid=11188718840257016812&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQ2" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
 
     <div class="station-section">
-  <div class="station-info">
-    <h3>1. 미쓰자와카미초 역 (블루라인)</h3>
-    <p>정문까지 도보 약 15분. 요코하마 시영 지하철 블루라인을 이용할 때 가장 가까운 역입니다.</p>
-  </div>
-  <div class="map-container">
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m13!1d3248.835474320986!2d139.598638176342!3d35.47617494084883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60185954294e7195%3A0xaaa8144d68bb36b1!2z66-47JOw7J6Q7Lm066-47LSIIOyXreumsw!5e0!3m2!1sko!2skr!4v1715600000000!5m2!1sko!2skr" allowfullscreen="" loading="lazy"></iframe>
-  </div>
-</div>
+      <div class="station-info">
+        <h3>2. 와다마치 역 (소테츠선)</h3>
+        <p>서문/남문 방향. 상점가가 있어 하굣길에 장을 보기 좋습니다.</p>
+      </div>
+      <div class="map-container">
+        <iframe src="https://maps.google.com/?cid=11188718840257016812&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQ3" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
 
-<div class="station-section">
-  <div class="station-info">
-    <h3>2. 와다마치 역 (소테츠선)</h3>
-    <p>서문/남문 방향. 역에서 학교까지 상점가가 이어져 있어 생활용품을 사거나 식사하기 좋습니다.</p>
-  </div>
-  <div class="map-container">
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m13!1d3249.26186414777!2d139.5878891763415!3d35.46566084142491!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x601859de602cbe25%3A0xa9909c54d43cd99c!2z7JmA64uk66eI7LmYIOyXreumsw!5e0!3m2!1sko!2skr!4v1715600000000!5m2!1sko!2skr" allowfullscreen="" loading="lazy"></iframe>
-  </div>
-</div>
+    <div class="station-section">
+      <div class="station-info">
+        <h3>3. 오카자와초(岡沢町) 버스정류장</h3>
+        <p>요코하마역에서 버스를 타고 올 때 내리는 곳입니다. 학교 서문과 가깝습니다.</p>
+      </div>
+      <div class="map-container">
+        <iframe src="https://maps.google.com/?cid=11188718840257016812&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQ4" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+
+    <div class="station-section">
+      <div class="station-info">
+        <h3>4. 미츠자와이케(三ツ沢池) 버스정류장</h3>
+        <p>정문 쪽으로 접근하기 좋은 버스 정류장입니다.</p>
+      </div>
+      <div class="map-container">
+        <iframe src="https://maps.google.com/?cid=11188718840257016812&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQ5" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
 
     <div class="tip">
       <strong>💡 미래의 나를 위한 메모:</strong> <br>
-      오르막길이 힘든 날에는 요코하마역에서 버스를 타는 방법도 고려해볼 것!
+      오카자와초(岡沢町)는 요코하마역 서쪽 출구 버스 터미널에서 출발하는 버스가 많으니 시간표를 잘 확인하자!
     </div>
   </div>
 
