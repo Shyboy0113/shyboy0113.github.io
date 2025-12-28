@@ -6,8 +6,8 @@
   <title>요코하마 교통 가이드</title>
   <style>
     body { 
-      font-family: sans-serif; 
-      background: #fff5f7; /* 메인과 동일한 벚꽃색 배경 */
+      font-family: 'Pretendard', sans-serif; 
+      background: #fff5f7; 
       padding: 30px; 
       display: flex; 
       flex-direction: column;
@@ -20,12 +20,26 @@
       padding: 40px; 
       border-radius: 20px; 
       box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+      box-sizing: border-box;
     }
     .back-link { text-decoration: none; color: #d63384; font-weight: bold; font-size: 14px; margin-bottom: 20px; display: inline-block; }
     h1 { color: #2b3a55; border-left: 6px solid #ffb7c5; padding-left: 15px; margin-bottom: 30px; }
-    .station-info { background: #fdfafb; padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #ffeef1; }
+    
+    .station-section { margin-bottom: 40px; }
+    .station-info { background: #fdfafb; padding: 20px; border-radius: 12px 12px 0 0; border: 1px solid #ffeef1; border-bottom: none; }
     .station-info h3 { margin-top: 0; color: #d63384; }
-    .tip { background: #2b3a55; color: white; padding: 20px; border-radius: 12px; }
+    
+    /* 구글 맵 컨테이너 */
+    .map-container {
+      width: 100%;
+      height: 300px;
+      border-radius: 0 0 12px 12px;
+      overflow: hidden;
+      border: 1px solid #ffeef1;
+    }
+    iframe { width: 100%; height: 100%; border: none; }
+
+    .tip { background: #2b3a55; color: white; padding: 20px; border-radius: 12px; margin-top: 20px; }
   </style>
 </head>
 <body>
@@ -34,19 +48,29 @@
     <a href="index.html" class="back-link">← 메인 페이지로 돌아가기</a>
     <h1>🚞 요코하마 국립대 교통 가이드</h1>
     
-    <div class="station-info">
-      <h3>1. 미츠자와카미초 역 (블루라인)</h3>
-      <p>정문까지 도보 약 15분 거리입니다. 학교가 언덕 위에 있으니 여름철에는 마음의 준비가 필요합니다!</p>
+    <div class="station-section">
+      <div class="station-info">
+        <h3>1. 미쓰자와카미초 역 (블루라인)</h3>
+        <p>정문까지 도보 약 15분. 요코하마 시영 지하철 블루라인을 이용할 때 가장 가까운 역입니다.</p>
+      </div>
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m13!1d3249.231268307409!2d139.6021226764359!3d35.47648737265431!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60185954294e7195%3A0xaa1a144d68bb36b1!2z66-47JO87J6Q7JmA7Lm066-47LSIIOyXreyXkA!5e0!3m2!1sko!2skr!4v1715600000000!5m2!1sko!2skr" allowfullscreen="" loading="lazy"></iframe>
+      </div>
     </div>
 
-    <div class="station-info">
-      <h3>2. 와다마치 역 (소테츠선)</h3>
-      <p>서문이나 남문으로 가기에 좋습니다. 역 근처 상점가(쇼텐가이)에서 장을 보기 편리합니다.</p>
+    <div class="station-section">
+      <div class="station-info">
+        <h3>2. 와다마치 역 (소테츠선)</h3>
+        <p>서문/남문 방향. 역에서 학교까지 상점가가 이어져 있어 생활용품을 사거나 식사하기 좋습니다.</p>
+      </div>
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m13!1d3250.2372439580436!2d139.5843079764353!3d35.46356837265902!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60185bde60ac1ec3%3A0x92528cdc7c1d9c9c!2z7JmA64uk66eI7LmYIOyXreyeqw!5e0!3m2!1sko!2skr!4v1715600000000!5m2!1sko!2skr" allowfullscreen="" loading="lazy"></iframe>
+      </div>
     </div>
 
     <div class="tip">
       <strong>💡 미래의 나를 위한 메모:</strong> <br>
-      일본에 다시 갈 때 파스모(PASMO)나 스이카(Suica) 카드가 지갑 어디 있는지 꼭 확인하자!
+      오르막길이 힘든 날에는 요코하마역에서 버스를 타는 방법도 고려해볼 것!
     </div>
   </div>
 
