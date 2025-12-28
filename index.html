@@ -38,7 +38,7 @@
       border: 1px solid rgba(255, 183, 197, 0.3);
     }
 
-    /* 상단 프로필 */
+    /* 상단 프로필 섹션 */
     .profile-section { display: flex; align-items: center; }
     .profile-img {
       width: 160px; height: 200px; background-color: #ddd;
@@ -59,91 +59,96 @@
 
     .project-title { margin: 0 0 15px 0; font-size: 26px; color: var(--japan-blue); }
 
-    /* 📌 블로그 프로필 카드 스타일 (요청 사항) */
-    .blog-profile-card {
-      display: flex;
-      align-items: center;
-      gap: 25px;
-      background: #fffcfd;
-      padding: 30px;
-      border-radius: 12px;
-      border: 1px solid #ffeef1;
-      margin-top: 10px;
+    /* 📌 2단 레이아웃 (그리드 시스템) */
+    .dual-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* 50:50 비율 */
+      gap: 20px;
+      margin-top: 25px;
     }
 
-    .blog-avatar {
-      width: 100px;
-      height: 100px;
+    /* 공통 카드 스타일 */
+    .info-card {
+      background: #fffcfd;
+      padding: 25px;
+      border-radius: 12px;
+      border: 1px solid #ffeef1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 180px; /* 좌우 높이 통일 */
+      box-sizing: border-box;
+    }
+
+    /* 왼쪽 블록: 블로그 프로필 */
+    .profile-card-inner {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .blog-avatar-small {
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       object-fit: cover;
       border: 2px solid var(--sakura-accent);
     }
 
-    .blog-info { flex: 1; }
-
     .blog-nickname {
-      font-size: 20px;
+      font-size: 17px;
       font-weight: bold;
       color: var(--japan-blue);
-      margin: 0 0 8px 0;
+      margin: 0;
     }
 
-    .blog-nickname span {
-      font-weight: normal;
-      font-size: 14px;
-      color: #999;
-      margin-left: 8px;
+    /* 오른쪽 블록: 교통 가이드 */
+    .guide-card-inner {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
     }
 
-    .blog-bio {
-      font-size: 15px;
-      color: #666;
-      margin: 0 0 15px 0;
-      line-height: 1.5;
-    }
-
-    /* 버튼 그룹 */
-    .btn-group { display: flex; gap: 12px; align-items: center; }
-
-    .btn-neighbor {
+    /* 버튼 스타일 */
+    .btn-small {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      padding: 8px 18px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: bold;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+
+    .btn-white {
       background: white;
       color: #333;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      transition: 0.2s;
+      border: 1px solid #ddd;
     }
 
-    .btn-neighbor:hover { background: #f9f9f9; border-color: #bbb; }
-
-    .btn-primary {
-      display: inline-block;
+    .btn-navy {
       background: var(--japan-blue);
       color: white !important;
-      padding: 9px 20px;
-      border-radius: 8px;
-      text-decoration: none !important;
-      font-weight: bold;
-      font-size: 14px;
-      transition: 0.2s;
     }
 
-    .btn-primary:hover { transform: translateY(-2px); opacity: 0.9; }
+    .btn-small:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
 
     /* 하단 링크 영역 */
-    .link-list { border-top: 1px solid #eee; padding-top: 20px; }
+    .link-list { border-top: 1px solid #eee; padding-top: 20px; margin-top: 10px;}
     .link-list a { display: inline-block; margin-right: 20px; color: #0066cc; text-decoration: none; font-weight: 500; }
 
-    @media (max-width: 600px) {
-      .profile-section, .blog-profile-card { flex-direction: column; text-align: center; }
-      .profile-img, .blog-avatar { margin-right: 0; margin-bottom: 20px; }
-      .btn-group { justify-content: center; }
+    /* 모바일 반응형 */
+    @media (max-width: 768px) {
+      .profile-section { flex-direction: column; text-align: center; }
+      .profile-img { margin-right: 0; margin-bottom: 20px; }
+      .dual-grid { grid-template-columns: 1fr; } /* 모바일에서는 세로로 한 줄 */
     }
   </style>
 </head>
@@ -160,32 +165,42 @@
 
   <div class="container">
     <div class="tag">Global Experience</div>
-    <h2 class="project-title"> 네이버 세종-요코하마 프로그램 아카이브</h2>
-    <p style="margin-bottom: 25px; line-height: 1.6;">
+    <h2 class="project-title">네이버 세종-요코하마 프로그램 아카이브</h2>
+    <p style="color: #666; font-size: 15px; margin: 0;">
       2024년 일본 교환학생 생활을 통해 얻은 소중한 경험과 지식들을 공유합니다.
     </p>
 
-    <div class="blog-profile-card">
-      <img src="blog_profile.jpg" alt="지능순" class="blog-avatar">
+    <div class="dual-grid">
       
-      <div class="blog-info">
-        <h3 class="blog-nickname">지능순 <span>blang_0113</span></h3>
-        <p class="blog-bio">제 경험이 다른 사람에게 도움이 될 수 있기를 바랍니다.</p>
-        
-        <div class="btn-group">
-          <a href="https://blog.naver.com/blang_0113" target="_blank" class="btn-neighbor">
-            <span style="color: var(--naver-green); font-weight: bold; font-size: 16px;">+</span> 블로그 방문
-          </a>
-          <a href="yokohama-guide.html" class="btn-primary">
-            🚞 교통 상세 가이드 보기
+      <div class="info-card">
+        <div class="profile-card-inner">
+          <img src="blog_profile.jpg" alt="지능순" class="blog-avatar-small">
+          <div>
+            <p class="blog-nickname">지능순 <span style="font-weight: normal; font-size: 12px; color: #999;">blang_0113</span></p>
+            <p style="font-size: 13px; color: #777; margin: 5px 0 10px 0;">제 경험이 도움이 되길 바랍니다.</p>
+            <a href="https://blog.naver.com/blang_0113" target="_blank" class="btn-small btn-white">
+              <span style="color: var(--naver-green);">+</span> 블로그 방문
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="guide-card-inner">
+          <div style="font-size: 30px;">🚞</div>
+          <p style="font-weight: bold; font-size: 16px; color: var(--japan-blue); margin: 0;">요코하마 교통 가이드</p>
+          <p style="font-size: 13px; color: #777; margin: 0;">현지 생활 밀착형 경로 및 팁 정리</p>
+          <a href="yokohama-guide.html" class="btn-small btn-navy">
+            교통 상세 가이드 보기
           </a>
         </div>
       </div>
+
     </div>
   </div>
 
   <div class="container">
-    <h2 style="margin-top:0;">More Links</h2>
+    <h2 style="margin-top:0; font-size: 20px;">More Links</h2>
     <div class="link-list">
       <a href="https://pokemon.hongkitaeportfolio.com" target="_blank">🔗 Pokemon 총무 포트폴리오</a>
       <a href="https://github.com/Shyboy0113" target="_blank">🐙 GitHub Repository</a>
