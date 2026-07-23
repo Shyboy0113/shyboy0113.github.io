@@ -3,209 +3,149 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hong Ki Tae Portfolio</title>
 
-  <style>
-    /* 🌸 벚꽃 & 일본풍 테마 변수 */
-    :root {
-      --sakura-pink: #fff5f7;
-      --sakura-accent: #ffb7c5;
-      --japan-blue: #2b3a55;
-      --text-gray: #444;
-      --naver-green: #2db400;
-    }
-
-    body {
-      margin: 0;
-      font-family: 'Pretendard', Arial, sans-serif;
-      background-color: var(--sakura-pink);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 50px 20px;
-      color: var(--text-gray);
-    }
-
-    .container {
-      background: white;
-      padding: 40px;
-      border-radius: 16px;
-      box-shadow: 0 4px 30px rgba(0,0,0,0.05);
-      width: 100%;
-      max-width: 850px;
-      margin-bottom: 30px;
-      box-sizing: border-box;
-      border: 1px solid rgba(255, 183, 197, 0.3);
-    }
-
-    /* 상단 프로필 섹션 */
-    .profile-section { display: flex; align-items: center; }
-    .profile-img {
-      width: 160px; height: 200px; background-color: #ddd;
-      border-radius: 12px; margin-right: 40px; object-fit: cover;
-      border: 3px solid var(--sakura-accent);
-    }
-
-    .tag {
-      display: inline-block;
-      background: #fff0f3;
-      color: #d63384;
-      padding: 5px 12px;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: bold;
-      margin-bottom: 12px;
-    }
-
-    .project-title { margin: 0 0 15px 0; font-size: 26px; color: var(--japan-blue); }
-
-    /* 📌 2단 레이아웃 (그리드 시스템) */
-    .dual-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr; /* 50:50 비율 */
-      gap: 20px;
-      margin-top: 25px;
-    }
-
-    /* 공통 카드 스타일 */
-    .info-card {
-      background: #fffcfd;
-      padding: 25px;
-      border-radius: 12px;
-      border: 1px solid #ffeef1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      min-height: 180px; /* 좌우 높이 통일 */
-      box-sizing: border-box;
-    }
-
-    /* 왼쪽 블록: 블로그 프로필 */
-    .profile-card-inner {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .blog-avatar-small {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid var(--sakura-accent);
-    }
-
-    .blog-nickname {
-      font-size: 17px;
-      font-weight: bold;
-      color: var(--japan-blue);
-      margin: 0;
-    }
-
-    /* 오른쪽 블록: 교통 가이드 */
-    .guide-card-inner {
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-
-    /* 버튼 스타일 */
-    .btn-small {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 16px;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: bold;
-      text-decoration: none;
-      transition: 0.2s;
-    }
-
-    .btn-white {
-      background: white;
-      color: #333;
-      border: 1px solid #ddd;
-    }
-
-    .btn-navy {
-      background: var(--japan-blue);
-      color: white !important;
-    }
-
-    .btn-small:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    }
-
-    /* 하단 링크 영역 */
-    .link-list { border-top: 1px solid #eee; padding-top: 20px; margin-top: 10px;}
-    .link-list a { display: inline-block; margin-right: 20px; color: #0066cc; text-decoration: none; font-weight: 500; }
-
-    /* 모바일 반응형 */
-    @media (max-width: 768px) {
-      .profile-section { flex-direction: column; text-align: center; }
-      .profile-img { margin-right: 0; margin-bottom: 20px; }
-      .dual-grid { grid-template-columns: 1fr; } /* 모바일에서는 세로로 한 줄 */
-    }
-  </style>
+  <title>홍기태 · Unity 클라이언트 프로그래머 포트폴리오</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="wrap">
 
-  <div class="container profile-section">
-    <img class="profile-img" src="profile.jpg" alt="Hong Ki Tae Profile">
-    <div class="profile-content">
-      <h1>Hong Ki Tae</h1>
-      <p>Unity Developer & Yokohama Archivist</p>
-      <p>개발과 일본 생활의 기록을 담은 포트폴리오입니다.</p>
+  <header class="card hero">
+    <img class="hero-photo" src="profile.jpg" alt="홍기태 프로필 사진" width="108" height="136">
+    <div>
+      <h1 class="hero-name">홍기태 <span style="font-size:16px;font-weight:400;color:#767676;">Hong Kitae</span></h1>
+      <p class="hero-role">Unity 클라이언트 프로그래머 · 세종대학교</p>
+      <div class="chips">
+        <span class="chip">Unity</span>
+        <span class="chip">C#</span>
+        <span class="chip">MapleStory Worlds</span>
+        <span class="chip">日本語 N1</span>
+      </div>
     </div>
-  </div>
+  </header>
 
-  <div class="container">
-    <div class="tag">Global Experience</div>
-    <h2 class="project-title">네이버 세종-요코하마 프로그램 아카이브</h2>
-    <p style="color: #666; font-size: 15px; margin: 0;">
-      2024년 일본 교환학생 생활을 통해 얻은 소중한 경험과 지식들을 공유합니다.
-    </p>
+  <p class="eyebrow">Shipped projects</p>
 
-    <div class="dual-grid">
-      
-      <div class="info-card">
-        <div class="profile-card-inner">
-          <img src="blog_profile.jpg" alt="지능순" class="blog-avatar-small">
-          <div>
-            <p class="blog-nickname">지능순 <span style="font-weight: normal; font-size: 12px; color: #999;">blang_0113</span></p>
-            <p style="font-size: 13px; color: #777; margin: 5px 0 10px 0;">제 경험이 도움이 되길 바랍니다.</p>
-            <a href="https://blog.naver.com/blang_0113" target="_blank" class="btn-small btn-white">
-              <span style="color: var(--naver-green);">+</span> 블로그 방문
-            </a>
-          </div>
+  <article class="card project">
+    <div class="project-inner">
+      <div class="project-shot">
+        <img src="dalt4-thumb.jpg" alt="Don't ALT-F4 게임 화면" loading="lazy" onerror="this.remove()">
+      </div>
+      <div class="project-body">
+        <div class="badges">
+          <span class="badge badge-steam">Steam 출시</span>
+          <span class="badge badge-free">Free to Play</span>
+          <span class="badge badge-solo">1인 개발</span>
+        </div>
+        <h2 class="project-title">Don't ALT-F4 <span>DAL'T-4</span></h2>
+        <p class="project-desc">
+          실제 키보드 단축키를 능력으로 쓰는 흑백 픽셀 퍼즐 게임. 3번의 행동이 한 턴을 이루는 규칙 안에서
+          이동과 타일 조작 순서를 설계해, 백신 프로그램을 따돌리고 시스템 심부까지 침투합니다.
+          기획부터 클라이언트 구현까지 1인 스튜디오 Blanc Studio 명의로 전부 담당했습니다.
+        </p>
+        <div class="project-meta">
+          <span>4챕터 60스테이지</span>
+          <span>도전과제 30</span>
+          <span>Unity · C#</span>
+          <span>2026.06.12 출시</span>
+        </div>
+        <div class="actions">
+          <a class="btn btn-navy" href="https://dalt4.hongkitaeportfolio.com/" target="_blank" rel="noopener">Steam에서 보기</a>
         </div>
       </div>
+    </div>
+  </article>
 
-      <div class="info-card">
-        <div class="guide-card-inner">
-          <div style="font-size: 30px;">🚞</div>
-          <p style="font-weight: bold; font-size: 16px; color: var(--japan-blue); margin: 0;">요코하마 교통 가이드</p>
-          <p style="font-size: 13px; color: #777; margin: 0;">현지 생활 밀착형 경로 및 팁 정리</p>
-          <a href="yokohama-guide.html" class="btn-small btn-navy">
-            교통 상세 가이드 보기
-          </a>
+  <article class="card project">
+    <div class="project-inner">
+      <div class="project-shot">
+        <img src="mesaeng-thumb.jpg" alt="메생게임 플레이 화면" loading="lazy" onerror="this.remove()">
+      </div>
+      <div class="project-body">
+        <div class="badges">
+          <span class="badge badge-msw">메이플스토리 월드</span>
+          <span class="badge badge-multi">멀티플레이</span>
+        </div>
+        <h2 class="project-title">메생게임</h2>
+        <p class="project-desc">
+          메이플월드를 보드게임 판 위로 옮긴 파티 게임. 동료를 모으고 자신만의 성장 경로를 설계해
+          검은 마법사에 맞섭니다. 최대 100명이 한 판에 참여하는 규모를 전제로 턴 진행과 상태 동기화를 구현했습니다.
+        </p>
+        <div class="project-meta">
+          <span>최대 100인</span>
+          <span>PC · 모바일</span>
+          <span>크리에이터 그룹 LifeIsMaple</span>
+        </div>
+        <div class="actions">
+          <a class="btn btn-navy" href="https://maplestoryworlds.nexon.com/ko/play/5f3773114545446e8fbbb06daad89e93" target="_blank" rel="noopener">플레이하기</a>
         </div>
       </div>
-
     </div>
-  </div>
+  </article>
 
-  <div class="container">
-    <h2 style="margin-top:0; font-size: 20px;">More Links</h2>
-    <div class="link-list">
-      <a href="https://pokemon.hongkitaeportfolio.com" target="_blank"><img src="Pokemon_MonsterBall.webp" alt="MonsterBall Logo" style="width: 16px; height: 16px;"> Pokemon 총무 포트폴리오</a>
-      <a href="https://github.com/Shyboy0113" target="_blank">🐙 GitHub Repository</a>
+  <p class="eyebrow">Certifications</p>
+
+  <section class="card cert-card">
+
+    <p class="cert-group">국가기술자격</p>
+    <div class="cert">
+      <div class="cert-mark is-pending" aria-hidden="true">◇</div>
+      <div class="cert-main">
+        <p class="cert-name">정보처리기사 <span class="badge badge-pending">결과 발표 예정</span></p>
+        <p class="cert-sub">한국산업인력공단 · 실기 응시 완료</p>
+      </div>
+      <span class="cert-date">2026.09.11</span>
     </div>
-  </div>
 
+    <p class="cert-group">어학</p>
+    <div class="cert">
+      <div class="cert-mark" aria-hidden="true">◆</div>
+      <div class="cert-main">
+        <p class="cert-name">신 JLPT N1 <span class="badge badge-score">147 / 180</span></p>
+        <p class="cert-sub">일본어능력시험 최상위 등급 · 합격 기준 100점</p>
+      </div>
+      <span class="cert-date">2025.01.10</span>
+    </div>
+
+    <div class="cert">
+      <div class="cert-mark" aria-hidden="true">◆</div>
+      <div class="cert-main">
+        <p class="cert-name">日本漢字能力検定 4급</p>
+        <p class="cert-sub">일본 한자능력검정협회 · 중학교 재학 수준</p>
+      </div>
+      <span class="cert-date">2024.11.01</span>
+    </div>
+
+    <div class="cert">
+      <div class="cert-mark" aria-hidden="true">◆</div>
+      <div class="cert-main">
+        <p class="cert-name">OPIc IM2</p>
+        <p class="cert-sub">영어 말하기 평가 · ACTFL</p>
+      </div>
+      <span class="cert-date">2025.02.22</span>
+    </div>
+
+  </section>
+
+  <p class="eyebrow">Archive</p>
+
+  <section class="card archive">
+    <img class="archive-avatar" src="blog_profile.jpg" alt="블로그 프로필 이미지" width="46" height="46">
+    <div class="archive-main">
+      <p class="archive-title">세종–요코하마 교환학생 아카이브</p>
+      <p class="archive-sub">2024년 일본 체류 기록 · 요코하마국립대 주변 교통 가이드</p>
+    </div>
+    <div class="actions" style="margin-top:0;">
+      <a class="btn btn-navy" href="yokohama-guide.html">교통 가이드</a>
+      <a class="btn btn-plain" href="https://blog.naver.com/blang_0113" target="_blank" rel="noopener">블로그</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <a href="https://github.com/Shyboy0113" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://blog.naver.com/blang_0113" target="_blank" rel="noopener">네이버 블로그</a>
+  </footer>
+
+</div>
 </body>
 </html>
