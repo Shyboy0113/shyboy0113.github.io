@@ -1,5 +1,3 @@
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
-
 :root {
   --sakura-bg: #fbf7f8;
   --sakura-tint: #f4e3e7;
@@ -87,13 +85,21 @@ a { color: inherit; }
 .project-inner { display: flex; align-items: stretch; }
 
 .project-shot {
-  flex: 0 0 420px;
+  flex: 0 0 50%;
   align-self: stretch;
-  min-height: 236px;
+  min-height: 200px;
   background: var(--screen);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.project-shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.project-shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
 
 .project-body {
   padding: 20px 24px;
@@ -235,7 +241,7 @@ a { color: inherit; }
   border-radius: var(--radius) var(--radius) 0 0;
 }
 
-.station-info h3 { margin: 0 0 6px; font-size: 16px; color: #d63384; }
+.station-info h2 { margin: 0 0 6px; font-size: 16px; color: #d63384; }
 .station-info p { margin: 0; font-size: 14px; }
 .station-note { font-size: 13px; color: var(--text-mute); }
 
@@ -260,14 +266,14 @@ a { color: inherit; }
 
 /* ---------- responsive ---------- */
 
-@media (max-width: 720px) {
+@media (max-width: 900px) {
   body { padding: 32px 14px 56px; }
   .card { padding: 20px 18px; }
   .cert-card { padding: 6px 18px 14px; }
   .hero { flex-direction: column; text-align: center; gap: 18px; }
   .chips { justify-content: center; }
   .project-inner { flex-direction: column; }
-  .project-shot { flex: none; width: 100%; min-height: 0; aspect-ratio: 16 / 9; }
+  .project-shot { flex: none; width: 100%; min-height: 0; }
   .project-body { padding: 20px 18px; }
   .cert { flex-wrap: wrap; }
   .cert-date { width: 100%; padding-left: 44px; }
