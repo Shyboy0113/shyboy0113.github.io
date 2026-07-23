@@ -84,16 +84,12 @@ a { color: inherit; }
 /* ---------- project ---------- */
 
 .project { padding: 0; overflow: hidden; margin-bottom: 14px; }
-.project-inner { display: flex; }
 
 .project-shot {
-  width: 232px;
-  flex-shrink: 0;
+  width: 100%;
+  aspect-ratio: 16 / 9;
   background: var(--screen);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 190px;
+  border-bottom: 1px solid var(--sakura-line);
 }
 
 .project-shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -263,8 +259,6 @@ a { color: inherit; }
   .cert-card { padding: 6px 18px 14px; }
   .hero { flex-direction: column; text-align: center; gap: 18px; }
   .chips { justify-content: center; }
-  .project-inner { flex-direction: column; }
-  .project-shot { width: 100%; min-height: 170px; }
   .project-body { padding: 20px 18px; }
   .cert { flex-wrap: wrap; }
   .cert-date { width: 100%; padding-left: 44px; }
