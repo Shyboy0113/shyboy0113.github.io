@@ -118,11 +118,13 @@ a { color: inherit; }
   font-weight: 500;
 }
 
-.badge-steam { background: #e6f1fb; color: #0c447c; }
-.badge-free  { background: #e1f5ee; color: #085041; }
-.badge-solo  { background: #fbeaf0; color: #72243e; }
-.badge-msw   { background: #faeeda; color: #633806; }
-.badge-multi { background: #eeedfe; color: #3c3489; }
+.badge-steam  { background: #e6f1fb; color: #0c447c; }
+.badge-free   { background: #e1f5ee; color: #085041; }
+.badge-puzzle { background: #eeedfe; color: #3c3489; }
+
+.badge-makerthon { background: #fbeaf0; color: #72243e; }
+.badge-msw       { background: #faeeda; color: #633806; }
+.badge-life      { background: #e3f1f7; color: #17546f; }
 .badge-pending { background: #faeeda; color: #633806; font-weight: 400; }
 .badge-score   { background: #e1f5ee; color: #085041; font-weight: 400; }
 
