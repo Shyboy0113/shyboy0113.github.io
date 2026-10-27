@@ -34,26 +34,15 @@
             href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
         />
         <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="portfolio-green.css" />
     </head>
-    <body>
+    <body class="portfolio-green">
+        <a class="skip-link" href="#programming">본문 바로가기</a>
+        <div class="site-top"><a href="/" class="wordmark">HONG KITAE<span>.</span></a><span>PROGRAMMING & EXHIBITIONS</span></div>
         <div class="wrap">
-            <header class="card hero">
-                <img class="hero-photo" src="profile.jpg" alt="홍기태 프로필 사진" width="108" height="136" />
-                <div>
-                    <h1 class="hero-name">
-                        홍기태 <span style="font-size: 16px; font-weight: 400; color: #767676">Hong Kitae</span>
-                    </h1>
-                    <p class="hero-role">Unity 클라이언트 프로그래머 · 세종대학교</p>
-                    <div class="chips">
-                        <span class="chip">Unity</span>
-                        <span class="chip">C#</span>
-                        <span class="chip">MapleStory Worlds</span>
-                        <span class="chip">日本語 N1</span>
-                    </div>
-                </div>
-            </header>
-
-            <p class="eyebrow">Shipped projects</p>
+            <div class="opening"><p class="eyebrow">GAME DEVELOPMENT / FIELD EXPERIENCE</p><h1>게임을 만드는 일,<br>현장에서 배우는 일.</h1><p>설계하고 구현한 게임, 그리고 현장에서 검증하고 배운 경험을 기록합니다.</p></div>
+            <div class="portfolio-layout"><aside class="side-nav"><p>CONTENTS</p><nav aria-label="분야별 탐색"><a href="#programming">01 <strong>프로그래밍</strong></a><a href="#exhibitions">02 <strong>전시회</strong></a><a href="#about">03 <strong>소개 · 자격</strong></a><a href="#archive">04 <strong>아카이브</strong></a></nav><div class="side-note">Unity · C#<br>홍기태의 포트폴리오</div></aside><main>
+            <section id="programming" class="portfolio-section"><div class="section-heading"><p class="eyebrow">01 / PROGRAMMING</p><h2>프로그래밍</h2><p>직접 제작한 게임과 기술적인 구현 경험</p></div><div class="project-grid">
 
             <article class="card project">
                 <div class="project-inner">
@@ -72,10 +61,6 @@
                             ALT와 F4를 이용해 맵을 클리어하는 퍼즐 장르 게임입니다. 약 3개월 간 1인 개발로
                             제작하였습니다.
                         </p>
-                        <p class="project-desc">
-                            2026 PlayX4에서 관람객 설문과 플레이 로그 수집을 기획하고,
-                            데이터를 바탕으로 클리어 버그와 퍼즐 레벨 디자인을 개선했습니다.
-                        </p>
                         <div class="project-meta">
                             <span>총 4챕터 - 60스테이지</span>
                             <span>ALT + F4</span>
@@ -91,7 +76,6 @@
                                 >게임 홈페이지</a
                             >
                             <a class="btn btn-plain" href="https://store.steampowered.com/app/4624670/" target="_blank" rel="noopener">Steam에서 보기</a>
-                            <a class="btn btn-plain" href="/playx4-preview/#playx4">PlayX4 현장 검증 경험 보기</a>
                         </div>
                     </div>
                 </div>
@@ -138,16 +122,32 @@
             </article>
 
 
-            <p class="eyebrow">Field experience</p>
-            <section class="card" aria-labelledby="beautyworld-title">
+            </div></section><section id="exhibitions" class="portfolio-section"><div class="section-heading"><p class="eyebrow">02 / EXHIBITIONS</p><h2>전시회</h2><p>게임 시연 검증과 일본어 현장 업무 경험</p></div><div class="exhibition-grid"><article class="card exhibition-card"><div class="exhibition-cover"><img src="/playx4-preview/assets/playx4.png" alt="PlayX4 플레이엑스포 공식 로고" width="667" height="204"></div><div class="badges"><span class="badge badge-free">게임 출품</span><span class="badge badge-puzzle">플레이 데이터</span></div><h3>2026 PlayX4</h3><p class="project-desc">직접 설계한 퍼즐의 난이도를 검증하기 위해 설문과 플레이 로그 수집을 기획했습니다. 이탈이 높은 구간을 분석해 클리어 버그와 레벨 디자인을 개선했습니다.</p><div class="project-meta"><span>수집 기획 · 문제 분석 · 개선</span></div><div class="actions"><a class="btn btn-navy" href="/playx4-preview/#playx4">현장 검증 경험 보기 ↗</a><a class="btn btn-plain" href="/DALT-4/">관련 게임 DALT’4</a></div></article>
+            <section class="card exhibition-card" aria-labelledby="beautyworld-title"><div class="exhibition-cover beauty-cover"><span>BEAUTYWORLD<br>JAPAN OSAKA</span><small>2026 · 일본어 현장 실무</small></div>
                 <div class="badges"><span class="badge badge-steam">일본어 현장 실무</span><span class="badge badge-puzzle">데이터 정리</span></div>
-                <h2 id="beautyworld-title">뷰티월드 재팬 오사카</h2>
+                <h3 id="beautyworld-title">뷰티월드 재팬 오사카</h3>
                 <p class="project-desc">㈜칸젠 · 스노우톡스 부스에서 일본어 제품 설명과 고객 응대, 바이어 미팅 통역을 담당했습니다. 행사 준비와 데이터 정리 과정, 현장에서 배운 점을 기록했습니다.</p>
                 <div class="project-meta"><span>2026.10.18–10.21</span><span>일본어 통역 · 현장 영업</span><span>Google Sheets · Python · AI 도구</span></div>
                 <div class="actions"><a class="btn btn-navy" href="beautyworld.html">업무 사례와 후기 보기</a></div>
             </section>
 
-            <p class="eyebrow">Certifications</p>
+            </div></section><section id="about" class="portfolio-section"><div class="section-heading"><p class="eyebrow">03 / ABOUT</p><h2>소개 · 자격</h2></div>            <header class="card hero">
+                <img class="hero-photo" src="profile.jpg" alt="홍기태 프로필 사진" width="108" height="136" />
+                <div>
+                    <h3 class="hero-name">
+                        홍기태 <span style="font-size: 16px; font-weight: 400; color: #767676">Hong Kitae</span>
+                    </h3>
+                    <p class="hero-role">Unity 클라이언트 프로그래머 · 세종대학교</p>
+                    <div class="chips">
+                        <span class="chip">Unity</span>
+                        <span class="chip">C#</span>
+                        <span class="chip">MapleStory Worlds</span>
+                        <span class="chip">日本語 N1</span>
+                    </div>
+                </div>
+            </header>
+
+
 
             <section class="card cert-card">
                 <p class="cert-group">국가기술자격</p>
@@ -189,7 +189,7 @@
                 </div>
             </section>
 
-            <p class="eyebrow">Archive</p>
+            </section><section id="archive" class="portfolio-section"><div class="section-heading"><p class="eyebrow">04 / ARCHIVE</p><h2>아카이브</h2></div>
 
             <section class="card archive">
                 <img class="archive-avatar" src="blog_profile.jpg" alt="블로그 프로필 이미지" width="46" height="46" />
@@ -205,10 +205,11 @@
                 </div>
             </section>
 
+</section>
             <footer class="footer">
                 <a href="https://github.com/Shyboy0113" target="_blank" rel="noopener">GitHub</a>
                 <a href="https://blog.naver.com/blang_0113" target="_blank" rel="noopener">네이버 블로그</a>
-            </footer>
+            </footer></main></div>
         </div>
     </body>
 </html>
