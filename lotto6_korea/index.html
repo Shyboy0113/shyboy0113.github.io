@@ -1,419 +1,1555 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>로또 6/45 번호 분석기</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gothic+A1:wght@400;500;700;800&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#ffffff; --surface:#f6f5f8; --ink:#1d2029; --muted:#676c7a; --line:#e4e2e9;
-  --slip:#c8102e; --slip-soft:#fbe8eb; --focus:#2b59c3;
-  --b1:#fbc400; --b2:#69c8f2; --b3:#ff7272; --b4:#aaaaaa; --b5:#b0d840; --ballink:#ffffff;
-  color-scheme: light;
-  box-sizing:border-box;
-  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#14161b; --surface:#1d2027; --ink:#eceef3; --muted:#a2a7b5; --line:#2e323c;
-    --slip:#ff5a6e; --slip-soft:#3a1c22; --focus:#8fb0ff; color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#14161b; --surface:#1d2027; --ink:#eceef3; --muted:#a2a7b5; --line:#2e323c;
-  --slip:#ff5a6e; --slip-soft:#3a1c22; --focus:#8fb0ff; color-scheme:dark;
-}
-*,*::before,*::after{box-sizing:inherit}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"Gothic A1","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
-.wrap{max-width:880px;margin:0 auto;padding:0 20px 64px}
-button{font:inherit;color:inherit}
-:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <title>로또 6/45 번호 분석기</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gothic+A1:wght@400;500;700;800&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            :root {
+                --bg: #ffffff;
+                --surface: #f6f5f8;
+                --ink: #1d2029;
+                --muted: #676c7a;
+                --line: #e4e2e9;
+                --slip: #c8102e;
+                --slip-soft: #fbe8eb;
+                --focus: #2b59c3;
+                --b1: #fbc400;
+                --b2: #69c8f2;
+                --b3: #ff7272;
+                --b4: #aaaaaa;
+                --b5: #b0d840;
+                --ballink: #ffffff;
+                color-scheme: light;
+                box-sizing: border-box;
+                padding-top: env(safe-area-inset-top, 0px);
+                padding-bottom: env(safe-area-inset-bottom, 0px);
+            }
+            @media (prefers-color-scheme: dark) {
+                :root:not([data-theme="light"]) {
+                    --bg: #14161b;
+                    --surface: #1d2027;
+                    --ink: #eceef3;
+                    --muted: #a2a7b5;
+                    --line: #2e323c;
+                    --slip: #ff5a6e;
+                    --slip-soft: #3a1c22;
+                    --focus: #8fb0ff;
+                    color-scheme: dark;
+                }
+            }
+            :root[data-theme="dark"] {
+                --bg: #14161b;
+                --surface: #1d2027;
+                --ink: #eceef3;
+                --muted: #a2a7b5;
+                --line: #2e323c;
+                --slip: #ff5a6e;
+                --slip-soft: #3a1c22;
+                --focus: #8fb0ff;
+                color-scheme: dark;
+            }
+            *,
+            *::before,
+            *::after {
+                box-sizing: inherit;
+            }
+            html {
+                scroll-padding-top: env(safe-area-inset-top, 0px);
+            }
+            body {
+                margin: 0;
+                background: var(--bg);
+                color: var(--ink);
+                font-family: "Gothic A1", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+                font-size: 16px;
+                line-height: 1.6;
+                -webkit-font-smoothing: antialiased;
+            }
+            .wrap {
+                max-width: 880px;
+                margin: 0 auto;
+                padding: 0 20px 64px;
+            }
+            button {
+                font: inherit;
+                color: inherit;
+            }
+            :focus-visible {
+                outline: 3px solid var(--focus);
+                outline-offset: 2px;
+                border-radius: 6px;
+            }
 
-/* masthead: the lotto slip edge */
-.mast{border-bottom:2px solid var(--slip);padding:28px 0 0;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
-.brand{font-family:"Black Han Sans","Gothic A1",sans-serif;font-size:22px;color:var(--slip);letter-spacing:.01em;margin:0 0 10px}
-nav.tabs{display:flex;gap:4px}
-nav.tabs a{display:block;padding:10px 14px;text-decoration:none;color:var(--muted);font-weight:700;font-size:15px;border:2px solid transparent;border-bottom:none;border-radius:8px 8px 0 0;margin-bottom:-2px}
-nav.tabs a[aria-current="page"]{color:var(--slip);border-color:var(--slip);background:var(--bg)}
+            /* masthead: the lotto slip edge */
+            .mast {
+                border-bottom: 2px solid var(--slip);
+                padding: 28px 0 0;
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-end;
+                gap: 16px;
+                flex-wrap: wrap;
+            }
+            .brand {
+                font-family: "Black Han Sans", "Gothic A1", sans-serif;
+                font-size: 22px;
+                color: var(--slip);
+                letter-spacing: 0.01em;
+                margin: 0 0 10px;
+            }
+            nav.tabs {
+                display: flex;
+                gap: 4px;
+            }
+            nav.tabs a {
+                display: block;
+                padding: 10px 14px;
+                text-decoration: none;
+                color: var(--muted);
+                font-weight: 700;
+                font-size: 15px;
+                border: 2px solid transparent;
+                border-bottom: none;
+                border-radius: 8px 8px 0 0;
+                margin-bottom: -2px;
+            }
+            nav.tabs a[aria-current="page"] {
+                color: var(--slip);
+                border-color: var(--slip);
+                background: var(--bg);
+            }
 
-section[hidden]{display:none}
-h2{font-size:20px;margin:36px 0 6px;font-weight:800}
-.lede{color:var(--muted);margin:0 0 18px;font-size:15px}
+            section[hidden] {
+                display: none;
+            }
+            h2 {
+                font-size: 20px;
+                margin: 36px 0 6px;
+                font-weight: 800;
+            }
+            .lede {
+                color: var(--muted);
+                margin: 0 0 18px;
+                font-size: 15px;
+            }
 
-/* balls */
-.balls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.ball{--s:42px;width:var(--s);height:var(--s);border-radius:50%;display:inline-grid;place-items:center;font-weight:800;color:var(--ballink);font-size:calc(var(--s)*.4);text-shadow:0 1px 1px rgba(0,0,0,.25);flex:none;font-variant-numeric:tabular-nums;
-  background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.55),rgba(255,255,255,0) 42%),var(--c)}
-.c1{--c:var(--b1)}.c2{--c:var(--b2)}.c3{--c:var(--b3)}.c4{--c:var(--b4)}.c5{--c:var(--b5)}
-.plus{color:var(--muted);font-weight:800;margin:0 2px}
-.ball.sm{--s:30px}
+            /* balls */
+            .balls {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                align-items: center;
+            }
+            .ball {
+                --s: 42px;
+                width: var(--s);
+                height: var(--s);
+                border-radius: 50%;
+                display: inline-grid;
+                place-items: center;
+                font-weight: 800;
+                color: var(--ballink);
+                font-size: calc(var(--s) * 0.4);
+                text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+                flex: none;
+                font-variant-numeric: tabular-nums;
+                background:
+                    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 42%), var(--c);
+            }
+            .c1 {
+                --c: var(--b1);
+            }
+            .c2 {
+                --c: var(--b2);
+            }
+            .c3 {
+                --c: var(--b3);
+            }
+            .c4 {
+                --c: var(--b4);
+            }
+            .c5 {
+                --c: var(--b5);
+            }
+            .plus {
+                color: var(--muted);
+                font-weight: 800;
+                margin: 0 2px;
+            }
+            .ball.sm {
+                --s: 30px;
+            }
 
-/* hero */
-.hero{padding:40px 0 8px}
-.round-no{font-family:"Black Han Sans","Gothic A1",sans-serif;font-size:clamp(56px,13vw,104px);line-height:.95;color:var(--slip);margin:0}
-.round-no small{font-size:.38em;color:var(--ink);margin-left:6px}
-.drawdate{color:var(--muted);margin:10px 0 26px;font-size:15px}
-.hero .balls{gap:12px}
-.hero .ball{--s:clamp(46px,11vw,64px)}
-.hero .ball{animation:drop .5s cubic-bezier(.3,1.4,.5,1) both}
-.hero .ball:nth-child(2){animation-delay:.07s}.hero .ball:nth-child(3){animation-delay:.14s}
-.hero .ball:nth-child(4){animation-delay:.21s}.hero .ball:nth-child(5){animation-delay:.28s}.hero .ball:nth-child(6){animation-delay:.35s}
-@keyframes drop{from{transform:translateY(-24px) scale(.7);opacity:0}to{transform:none;opacity:1}}
-@media (prefers-reduced-motion:reduce){.hero .ball{animation:none}}
-.hero-meta{margin:18px 0 0;color:var(--muted);font-size:14px}
-.actions{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}
-.btn{border:none;background:var(--slip);color:#fff;font-weight:800;padding:12px 22px;border-radius:999px;cursor:pointer;font-size:16px}
-.btn:hover{filter:brightness(1.08)}
-.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+            /* hero */
+            .hero {
+                padding: 40px 0 8px;
+            }
+            .round-no {
+                font-family: "Black Han Sans", "Gothic A1", sans-serif;
+                font-size: clamp(56px, 13vw, 104px);
+                line-height: 0.95;
+                color: var(--slip);
+                margin: 0;
+            }
+            .round-no small {
+                font-size: 0.38em;
+                color: var(--ink);
+                margin-left: 6px;
+            }
+            .drawdate {
+                color: var(--muted);
+                margin: 10px 0 26px;
+                font-size: 15px;
+            }
+            .hero .balls {
+                gap: 12px;
+            }
+            .hero .ball {
+                --s: clamp(46px, 11vw, 64px);
+            }
+            .hero .ball {
+                animation: drop 0.5s cubic-bezier(0.3, 1.4, 0.5, 1) both;
+            }
+            .hero .ball:nth-child(2) {
+                animation-delay: 0.07s;
+            }
+            .hero .ball:nth-child(3) {
+                animation-delay: 0.14s;
+            }
+            .hero .ball:nth-child(4) {
+                animation-delay: 0.21s;
+            }
+            .hero .ball:nth-child(5) {
+                animation-delay: 0.28s;
+            }
+            .hero .ball:nth-child(6) {
+                animation-delay: 0.35s;
+            }
+            @keyframes drop {
+                from {
+                    transform: translateY(-24px) scale(0.7);
+                    opacity: 0;
+                }
+                to {
+                    transform: none;
+                    opacity: 1;
+                }
+            }
+            @media (prefers-reduced-motion: reduce) {
+                .hero .ball {
+                    animation: none;
+                }
+            }
+            .hero-meta {
+                margin: 18px 0 0;
+                color: var(--muted);
+                font-size: 14px;
+            }
+            .actions {
+                display: flex;
+                gap: 10px;
+                margin-top: 24px;
+                flex-wrap: wrap;
+            }
+            .btn {
+                border: none;
+                background: var(--slip);
+                color: #fff;
+                font-weight: 800;
+                padding: 12px 22px;
+                border-radius: 999px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+            .btn:hover {
+                filter: brightness(1.08);
+            }
+            .btn.ghost {
+                background: transparent;
+                color: var(--ink);
+                border: 1.5px solid var(--line);
+            }
 
-/* methods */
-.methods{border-top:1px solid var(--line);margin-top:8px}
-.method{display:grid;grid-template-columns:1fr auto;gap:8px 20px;align-items:center;padding:18px 0;border-bottom:1px solid var(--line)}
-.method h3{margin:0;font-size:16px;font-weight:800}
-.method p{margin:2px 0 0;color:var(--muted);font-size:14px}
-.method .why{grid-column:1/-1;font-size:13px;color:var(--muted);margin:0}
-.method.main h3::after{content:"대표 번호";font-size:12px;font-weight:700;color:var(--slip);background:var(--slip-soft);padding:2px 8px;border-radius:999px;margin-left:8px;vertical-align:2px}
-@media (max-width:640px){.method{grid-template-columns:1fr}}
-.note{margin-top:28px;padding:14px 16px;background:var(--surface);border-radius:10px;font-size:14px;color:var(--muted)}
+            /* methods */
+            .methods {
+                border-top: 1px solid var(--line);
+                margin-top: 8px;
+            }
+            .method {
+                display: grid;
+                grid-template-columns: 1fr auto;
+                gap: 8px 20px;
+                align-items: center;
+                padding: 18px 0;
+                border-bottom: 1px solid var(--line);
+            }
+            .method h3 {
+                margin: 0;
+                font-size: 16px;
+                font-weight: 800;
+            }
+            .method p {
+                margin: 2px 0 0;
+                color: var(--muted);
+                font-size: 14px;
+            }
+            .method .why {
+                grid-column: 1/-1;
+                font-size: 13px;
+                color: var(--muted);
+                margin: 0;
+            }
+            .method.main h3::after {
+                content: "대표 번호";
+                font-size: 12px;
+                font-weight: 700;
+                color: var(--slip);
+                background: var(--slip-soft);
+                padding: 2px 8px;
+                border-radius: 999px;
+                margin-left: 8px;
+                vertical-align: 2px;
+            }
+            @media (max-width: 640px) {
+                .method {
+                    grid-template-columns: 1fr;
+                }
+            }
+            .note {
+                margin-top: 28px;
+                padding: 14px 16px;
+                background: var(--surface);
+                border-radius: 10px;
+                font-size: 14px;
+                color: var(--muted);
+            }
 
-/* rounds */
-.picker{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0 20px}
-.picker input{width:110px;padding:10px 12px;border:1.5px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;font-weight:700}
-.iconbtn{border:1.5px solid var(--line);background:var(--bg);border-radius:8px;padding:9px 14px;cursor:pointer;font-weight:700}
-.iconbtn:disabled{opacity:.4;cursor:default}
-.shown{padding:22px;border:2px solid var(--slip);border-radius:14px}
-.shown .t{display:flex;align-items:baseline;gap:10px;margin-bottom:14px;flex-wrap:wrap}
-.shown .t b{font-family:"Black Han Sans","Gothic A1",sans-serif;font-size:34px;font-weight:400;color:var(--slip);line-height:1}
-.shown .t span{color:var(--muted)}
-.shown .ball{--s:48px}
-.list{margin-top:24px;border-top:1px solid var(--line)}
-.row{display:flex;gap:16px;align-items:center;padding:10px 4px;border-bottom:1px solid var(--line);cursor:pointer;width:100%;background:none;border-left:none;border-right:none;border-top:none;text-align:left}
-.row:hover{background:var(--surface)}
-.row .r{width:64px;font-weight:800;flex:none}
-.row .d{width:96px;color:var(--muted);font-size:14px;flex:none}
-@media (max-width:560px){.row .d{display:none}}
-.more{margin-top:14px}
-.addbox{margin-top:36px;padding:18px;background:var(--surface);border-radius:12px}
-.addbox h3{margin:0 0 4px;font-size:16px}
-.addbox p{margin:0 0 12px;font-size:14px;color:var(--muted)}
-.addgrid{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.addgrid input{width:52px;padding:9px 6px;text-align:center;border:1.5px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;font-weight:700}
-.msg{font-size:14px;margin-top:10px;min-height:1.4em}
-.msg.err{color:var(--slip)}
+            /* rounds */
+            .picker {
+                display: flex;
+                gap: 8px;
+                align-items: center;
+                flex-wrap: wrap;
+                margin: 8px 0 20px;
+            }
+            .picker input {
+                width: 110px;
+                padding: 10px 12px;
+                border: 1.5px solid var(--line);
+                border-radius: 8px;
+                background: var(--bg);
+                color: var(--ink);
+                font: inherit;
+                font-weight: 700;
+            }
+            .iconbtn {
+                border: 1.5px solid var(--line);
+                background: var(--bg);
+                border-radius: 8px;
+                padding: 9px 14px;
+                cursor: pointer;
+                font-weight: 700;
+            }
+            .iconbtn:disabled {
+                opacity: 0.4;
+                cursor: default;
+            }
+            .shown {
+                padding: 22px;
+                border: 2px solid var(--slip);
+                border-radius: 14px;
+            }
+            .shown .t {
+                display: flex;
+                align-items: baseline;
+                gap: 10px;
+                margin-bottom: 14px;
+                flex-wrap: wrap;
+            }
+            .shown .t b {
+                font-family: "Black Han Sans", "Gothic A1", sans-serif;
+                font-size: 34px;
+                font-weight: 400;
+                color: var(--slip);
+                line-height: 1;
+            }
+            .shown .t span {
+                color: var(--muted);
+            }
+            .shown .ball {
+                --s: 48px;
+            }
+            .list {
+                margin-top: 24px;
+                border-top: 1px solid var(--line);
+            }
+            .row {
+                display: flex;
+                gap: 16px;
+                align-items: center;
+                padding: 10px 4px;
+                border-bottom: 1px solid var(--line);
+                cursor: pointer;
+                width: 100%;
+                background: none;
+                border-left: none;
+                border-right: none;
+                border-top: none;
+                text-align: left;
+            }
+            .row:hover {
+                background: var(--surface);
+            }
+            .row .r {
+                width: 64px;
+                font-weight: 800;
+                flex: none;
+            }
+            .row .d {
+                width: 96px;
+                color: var(--muted);
+                font-size: 14px;
+                flex: none;
+            }
+            @media (max-width: 560px) {
+                .row .d {
+                    display: none;
+                }
+            }
+            .more {
+                margin-top: 14px;
+            }
+            .addbox {
+                margin-top: 36px;
+                padding: 18px;
+                background: var(--surface);
+                border-radius: 12px;
+            }
+            .addbox h3 {
+                margin: 0 0 4px;
+                font-size: 16px;
+            }
+            .addbox p {
+                margin: 0 0 12px;
+                font-size: 14px;
+                color: var(--muted);
+            }
+            .addgrid {
+                display: flex;
+                gap: 6px;
+                flex-wrap: wrap;
+                align-items: center;
+            }
+            .addgrid input {
+                width: 52px;
+                padding: 9px 6px;
+                text-align: center;
+                border: 1.5px solid var(--line);
+                border-radius: 8px;
+                background: var(--bg);
+                color: var(--ink);
+                font: inherit;
+                font-weight: 700;
+            }
+            .msg {
+                font-size: 14px;
+                margin-top: 10px;
+                min-height: 1.4em;
+            }
+            .msg.err {
+                color: var(--slip);
+            }
 
-/* stats */
-.seg{display:inline-flex;border:1.5px solid var(--line);border-radius:999px;padding:3px;margin-bottom:16px}
-.seg button{border:none;background:none;padding:6px 14px;border-radius:999px;cursor:pointer;font-weight:700;font-size:14px;color:var(--muted)}
-.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
-.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
-table{border-collapse:collapse;width:100%;min-width:620px;font-variant-numeric:tabular-nums;font-size:15px}
-th,td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
-th:first-child,td:first-child{text-align:left}
-thead th{position:sticky;top:0;background:var(--surface);font-size:13px;color:var(--muted);font-weight:700}
-thead th button{all:unset;cursor:pointer}
-thead th button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
-th[aria-sort="descending"] button::after{content:" ▼";font-size:10px}
-th[aria-sort="ascending"] button::after{content:" ▲";font-size:10px}
-tbody tr:last-child td{border-bottom:none}
-td.bar{min-width:150px}
-.barcell{display:flex;align-items:center;gap:8px;justify-content:flex-end}
-.barcell i{display:block;height:8px;border-radius:4px;background:var(--slip);opacity:.75}
-.foot{margin-top:40px;font-size:13px;color:var(--muted)}
-</style>
-</head>
-<body>
-<div class="wrap">
-  <header class="mast">
-    <p class="brand">로또 6/45 번호 분석기</p>
-    <nav class="tabs" aria-label="화면">
-      <a href="#predict" data-view="predict">예상 번호</a>
-      <a href="#rounds" data-view="rounds">회차별 번호</a>
-      <a href="#stats" data-view="stats">번호별 통계</a>
-    </nav>
-  </header>
+            /* stats */
+            .seg {
+                display: inline-flex;
+                border: 1.5px solid var(--line);
+                border-radius: 999px;
+                padding: 3px;
+                margin-bottom: 16px;
+            }
+            .seg button {
+                border: none;
+                background: none;
+                padding: 6px 14px;
+                border-radius: 999px;
+                cursor: pointer;
+                font-weight: 700;
+                font-size: 14px;
+                color: var(--muted);
+            }
+            .seg button[aria-pressed="true"] {
+                background: var(--ink);
+                color: var(--bg);
+            }
+            .tablewrap {
+                overflow-x: auto;
+                border: 1px solid var(--line);
+                border-radius: 12px;
+            }
+            table {
+                border-collapse: collapse;
+                width: 100%;
+                min-width: 620px;
+                font-variant-numeric: tabular-nums;
+                font-size: 15px;
+            }
+            th,
+            td {
+                padding: 9px 12px;
+                text-align: right;
+                border-bottom: 1px solid var(--line);
+                white-space: nowrap;
+            }
+            th:first-child,
+            td:first-child {
+                text-align: left;
+            }
+            thead th {
+                position: sticky;
+                top: 0;
+                background: var(--surface);
+                font-size: 13px;
+                color: var(--muted);
+                font-weight: 700;
+            }
+            thead th button {
+                all: unset;
+                cursor: pointer;
+            }
+            thead th button:focus-visible {
+                outline: 3px solid var(--focus);
+                outline-offset: 2px;
+            }
+            th[aria-sort="descending"] button::after {
+                content: " ▼";
+                font-size: 10px;
+            }
+            th[aria-sort="ascending"] button::after {
+                content: " ▲";
+                font-size: 10px;
+            }
+            tbody tr:last-child td {
+                border-bottom: none;
+            }
+            td.bar {
+                min-width: 150px;
+            }
+            .barcell {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                justify-content: flex-end;
+            }
+            .barcell i {
+                display: block;
+                height: 8px;
+                border-radius: 4px;
+                background: var(--slip);
+                opacity: 0.75;
+            }
+            .foot {
+                margin-top: 40px;
+                font-size: 13px;
+                color: var(--muted);
+            }
+        </style>
+        <style>
+            nav.tabs {
+                overflow-x: auto;
+                scrollbar-width: none;
+            }
+            nav.tabs a {
+                white-space: nowrap;
+            }
+            @media (max-width: 560px) {
+                nav.tabs a {
+                    padding: 9px 10px;
+                    font-size: 14px;
+                }
+            }
+            .method .save {
+                grid-column: 1/-1;
+                justify-self: start;
+                border: 1.5px solid var(--line);
+                background: var(--bg);
+                border-radius: 999px;
+                padding: 5px 12px;
+                font-size: 13px;
+                font-weight: 700;
+                cursor: pointer;
+            }
+            .method .save:hover {
+                border-color: var(--slip);
+                color: var(--slip);
+            }
+            .method .why {
+                grid-column: 1;
+            }
+            .ball.miss {
+                --c: var(--line);
+                color: var(--muted);
+                text-shadow: none;
+                background: var(--line);
+            }
+            .ball.bon {
+                box-shadow:
+                    0 0 0 2px var(--bg),
+                    0 0 0 4px var(--slip);
+            }
+            .account {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                flex-wrap: wrap;
+                padding: 14px 16px;
+                background: var(--surface);
+                border-radius: 12px;
+                margin-bottom: 20px;
+                font-size: 14px;
+            }
+            .account .who {
+                flex: 1;
+                min-width: 180px;
+                color: var(--muted);
+            }
+            .account .who b {
+                color: var(--ink);
+            }
+            .summary {
+                display: flex;
+                gap: 28px;
+                flex-wrap: wrap;
+                margin: 6px 0 22px;
+            }
+            .summary div {
+                font-size: 13px;
+                color: var(--muted);
+            }
+            .summary b {
+                display: block;
+                font-size: 24px;
+                color: var(--ink);
+                font-weight: 800;
+                font-variant-numeric: tabular-nums;
+            }
+            .tgroup {
+                border-top: 1px solid var(--line);
+                padding: 14px 0;
+            }
+            .tgroup h3 {
+                margin: 0 0 10px;
+                font-size: 15px;
+                display: flex;
+                gap: 10px;
+                align-items: baseline;
+                flex-wrap: wrap;
+            }
+            .tgroup h3 span {
+                font-weight: 500;
+                color: var(--muted);
+                font-size: 13px;
+            }
+            .ticket {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 6px 0;
+                flex-wrap: wrap;
+            }
+            .rank {
+                font-size: 13px;
+                font-weight: 800;
+                padding: 3px 10px;
+                border-radius: 999px;
+                background: var(--surface);
+                color: var(--muted);
+                min-width: 56px;
+                text-align: center;
+            }
+            .rank.win {
+                background: var(--slip);
+                color: #fff;
+            }
+            .del {
+                border: none;
+                background: none;
+                color: var(--muted);
+                cursor: pointer;
+                font-size: 13px;
+                text-decoration: underline;
+                margin-left: auto;
+            }
+            .empty {
+                color: var(--muted);
+                padding: 18px 0;
+            }
+            .pill {
+                font-size: 12px;
+                color: var(--muted);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrap">
+            <header class="mast">
+                <p class="brand">로또 6/45 번호 분석기</p>
+                <nav class="tabs" aria-label="화면">
+                    <a href="#predict" data-view="predict">예상 번호</a>
+                    <a href="#rounds" data-view="rounds">회차별 번호</a>
+                    <a href="#stats" data-view="stats">번호별 통계</a>
+                    <a href="#mine" data-view="mine">내 번호</a>
+                </nav>
+            </header>
 
-  <section id="v-predict">
-    <div class="hero">
-      <p class="round-no"><span id="nextNo"></span><small>회 예상 번호</small></p>
-      <p class="drawdate" id="nextDate"></p>
-      <div class="balls" id="heroBalls" aria-live="polite"></div>
-      <p class="hero-meta" id="heroMeta"></p>
-      <div class="actions">
-        <button class="btn" id="regen">다시 뽑기</button>
-      </div>
-    </div>
+            <section id="v-predict">
+                <div class="hero">
+                    <p class="round-no"><span id="nextNo"></span><small>회 예상 번호</small></p>
+                    <p class="drawdate" id="nextDate"></p>
+                    <div class="balls" id="heroBalls" aria-live="polite"></div>
+                    <p class="hero-meta" id="heroMeta"></p>
+                    <div class="actions">
+                        <button class="btn" id="regen">다시 뽑기</button>
+                        <button class="btn ghost" id="saveHero">내 번호에 저장</button>
+                    </div>
+                    <p class="msg" id="heroMsg" role="status"></p>
+                </div>
 
-    <h2>분석 방식별 번호</h2>
-    <p class="lede" id="basis"></p>
-    <div class="methods" id="methods"></div>
-    <p class="note">로또는 매 회차 독립적으로 추첨돼서, 어떤 조합이든 1등 확률은 똑같이 8,145,060분의 1이에요. 과거 통계는 번호를 고르는 재미로만 즐겨주세요.</p>
-  </section>
+                <h2>분석 방식별 번호</h2>
+                <p class="lede" id="basis"></p>
+                <div class="methods" id="methods"></div>
+                <p class="note">
+                    로또는 매 회차 독립적으로 추첨돼서, 어떤 조합이든 1등 확률은 똑같이 8,145,060분의 1이에요. 과거
+                    통계는 번호를 고르는 재미로만 즐겨주세요.
+                </p>
+            </section>
 
-  <section id="v-rounds" hidden>
-    <h2>회차별 당첨번호</h2>
-    <p class="lede">회차를 입력하거나 목록에서 고르세요.</p>
-    <div class="picker">
-      <button class="iconbtn" id="prevR" aria-label="이전 회차">◀ 이전</button>
-      <input id="roundInput" type="number" inputmode="numeric" min="1" aria-label="회차 번호">
-      <button class="iconbtn" id="goR">보기</button>
-      <button class="iconbtn" id="nextR" aria-label="다음 회차">다음 ▶</button>
-    </div>
-    <div class="shown" id="shown"></div>
-    <div class="list" id="list"></div>
-    <button class="iconbtn more" id="moreBtn">20개 더 보기</button>
+            <section id="v-rounds" hidden>
+                <h2>회차별 당첨번호</h2>
+                <p class="lede">회차를 입력하거나 목록에서 고르세요.</p>
+                <div class="picker">
+                    <button class="iconbtn" id="prevR" aria-label="이전 회차">◀ 이전</button>
+                    <input id="roundInput" type="number" inputmode="numeric" min="1" aria-label="회차 번호" />
+                    <button class="iconbtn" id="goR">보기</button>
+                    <button class="iconbtn" id="nextR" aria-label="다음 회차">다음 ▶</button>
+                </div>
+                <div class="shown" id="shown"></div>
+                <div class="list" id="list"></div>
+                <button class="iconbtn more" id="moreBtn">20개 더 보기</button>
 
-    <div class="addbox">
-      <h3>새 회차 추가</h3>
-      <p id="addHint"></p>
-      <div class="addgrid" id="addgrid"></div>
-      <div class="actions" style="margin-top:12px">
-        <button class="btn" id="addBtn">추가하기</button>
-        <button class="btn ghost" id="resetBtn" hidden>직접 추가한 회차 지우기</button>
-      </div>
-      <p class="msg" id="addMsg" role="status"></p>
-    </div>
-  </section>
+                <div class="addbox" id="addbox" hidden>
+                    <h3>새 당첨번호 등록</h3>
+                    <p id="addHint"></p>
+                    <div class="addgrid" id="addgrid"></div>
+                    <div class="actions" style="margin-top: 12px">
+                        <button class="btn" id="addBtn">등록하기</button>
+                        <button class="btn ghost" id="undoBtn" hidden></button>
+                    </div>
+                    <p class="msg" id="addMsg" role="status"></p>
+                </div>
+            </section>
 
-  <section id="v-stats" hidden>
-    <h2>번호별 출현 횟수</h2>
-    <p class="lede" id="statsLede"></p>
-    <div class="seg" role="group" aria-label="집계 기간">
-      <button data-range="all" aria-pressed="true">전체</button>
-      <button data-range="100" aria-pressed="false">최근 100회</button>
-      <button data-range="50" aria-pressed="false">최근 50회</button>
-    </div>
-    <div class="tablewrap">
-      <table>
-        <thead><tr>
-          <th data-k="n" aria-sort="ascending"><button>번호</button></th>
-          <th data-k="main"><button>당첨번호</button></th>
-          <th data-k="bonus"><button>보너스</button></th>
-          <th data-k="total"><button>합계</button></th>
-          <th data-k="rate"><button>출현율</button></th>
-          <th data-k="last"><button>마지막 출현</button></th>
-          <th data-k="gap"><button>미출현</button></th>
-        </tr></thead>
-        <tbody id="tbody"></tbody>
-      </table>
-    </div>
-    <p class="foot">출현율은 당첨번호 6개 기준으로, 해당 기간 회차 중 그 번호가 당첨번호에 포함된 비율이에요. 이론상 기대값은 13.3%입니다.</p>
-  </section>
+            <section id="v-stats" hidden>
+                <h2>번호별 출현 횟수</h2>
+                <p class="lede" id="statsLede"></p>
+                <div class="seg" role="group" aria-label="집계 기간">
+                    <button data-range="all" aria-pressed="true">전체</button>
+                    <button data-range="100" aria-pressed="false">최근 100회</button>
+                    <button data-range="50" aria-pressed="false">최근 50회</button>
+                </div>
+                <div class="tablewrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th data-k="n" aria-sort="ascending"><button>번호</button></th>
+                                <th data-k="main"><button>당첨번호</button></th>
+                                <th data-k="bonus"><button>보너스</button></th>
+                                <th data-k="total"><button>합계</button></th>
+                                <th data-k="rate"><button>출현율</button></th>
+                                <th data-k="last"><button>마지막 출현</button></th>
+                                <th data-k="gap"><button>미출현</button></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody"></tbody>
+                    </table>
+                </div>
+                <p class="foot">
+                    출현율은 당첨번호 6개 기준으로, 해당 기간 회차 중 그 번호가 당첨번호에 포함된 비율이에요. 이론상
+                    기대값은 13.3%입니다.
+                </p>
+            </section>
 
-  <p class="foot" id="source"></p>
-</div>
+            <section id="v-mine" hidden>
+                <h2>내 번호</h2>
+                <p class="lede">구입한 번호를 기록하면 추첨 결과와 자동으로 맞춰 봐요.</p>
+                <div class="account" id="account"></div>
+                <div id="mineBody">
+                    <div class="addbox" style="margin-top: 0">
+                        <h3>구입한 번호 기록</h3>
+                        <p>회차와 번호 6개를 입력하세요. 한 게임씩 저장돼요.</p>
+                        <div class="addgrid">
+                            <input
+                                id="tRound"
+                                type="number"
+                                inputmode="numeric"
+                                min="1"
+                                aria-label="회차"
+                                style="width: 84px"
+                            />
+                            <span class="pill">회</span>
+                        </div>
+                        <div class="addgrid" id="tgrid" style="margin-top: 8px"></div>
+                        <div class="actions" style="margin-top: 12px">
+                            <button class="btn" id="tSave">저장하기</button>
+                        </div>
+                        <p class="msg" id="tMsg" role="status"></p>
+                    </div>
+                    <h2>기록</h2>
+                    <div class="summary" id="tSummary"></div>
+                    <div id="tList"></div>
+                </div>
+            </section>
 
-<script>
-(function(){
-"use strict";
-const RAW="102329333740160913212532420211161921273130142730314042021624294041420314152627404234020916252640420819253437390902041617363914092530334144060107363741421402112125394544222325373842260206123133401503041630313713060724373840330304091732370103121319323529063038394043261014182023304106121718313221040506081739250513171833424407082729364306020421264344160405071820253101202628374327091823253537010105133439401108172035364404070918232835320614192534441104073233404109092635374042020203112637433901102326284031072730333537421617223037433606071315214308071318192526061320233538433417181921233201063135383944010311213038453901102027333517081315233138391417263136452706101826373803040716193340300210121522440102031116264435020415162029010708143233394201082127363937172131374044071014303133371907101625294406102425334044010629363941451302082536394211141519303843080308152729352103202336384005141518212636390425333640433902030717222445030710153638331012151626393805081415193935051922252843260509121629412102041117262701031218324043380615171835402302052432344428010315222537430218293243443710132529333538031224273032141718242526300105071113203306010203142742390610151719341416232734424511060813233136210212373941453304121623344326011720243041270426282933403717202935384410012124262942270314243335361706222436384419053234404145060817273134431401030821223120060714152036030609162324324301031027293711010711233742060103173235450817222426354042051415273045101732333442443508102034414528041012222433290104050609311707182223294412010534364244330720222329430107183133364027262930334142430409283336452611141926284102010206092528310204253134371705102234364435030410171922380311131417213804061011323730122830343843090111161736400807171828304527041623252942010208323335361807202227404301030510293243351230343637453919232528384217071924274245310810111415213703172334414543040715182326130312202331354306142228353916021630364142110709202536391510112728373919091115202843130313171819280808122931424302121630344044192627284243450804151726363743020313202744090219273541422504061321404236212533343536170211213441422702182528373916010210131819150105132629344303081112133633061921354045201619203233410405182830424502192630333539370409131821340701183041424332030708343941012234364042454401052125384124071126282944160609101139412705131819224231091227363945142427283036390403103140424330162735374345190211131531421004162529343501041921242641350309243033341813141822353916192628313336170417303233341501101316374306010511121823090509172539433202152021293422142123324045441315272934403502182434404205010206162033410102040819381404101419214509010208182938421924273031343608143235374528081418303144150506242532370804081118374533061418263639131520232639442807101922354031353637414445300712163442450412192025414502142122253036430506131417200703112438394426121427333944170103112430320703121435404505010321293537300102031520254303111431323738142531344044240207182024333710192223253739121317203341081112182131380802030405202442050720252837320203071543440407161733364001162027333539380108141829442004112026353716051119213443310220333537401005072829394344010318202627380419262730420705111319313607020608142122340405151622420217253536394423040509112338350511142932331205101931444527080910122444350406131728403913212224263704212226273137080104081337390701111721244433020415283134351115243941440706101640414321021624272835210419202132344302121719284234131625363738190911273132382213182123263915121528363940130308172338451303082731414411192330374345380607192528384514232631394528081925313436330105192024302701050624274232041114212343320613273132370414273031384017040514354245340712152437404306111618314302091224252931360127283237401809162736414405050934373839120304091122423707082434364101031019243245120518203642433205091220212627030809272940360709122739432801082431344406131415263539251419203538402604152133394125101213152529200311373941431307163136373811101123243637350103040614411202051018313230060818313845420207152430452813333740414502011519404244170612242735374101121728354110031433373842100813183239450703070818204245171831323334100109172129332406101730373840010412161838080308152730454406111920283234050927293740190103202536452407091012263839071113333743261319203238420402141730384543041016263341380708182123390904182330344119051521232545121415171937454001020511183622010519283441160412242728321002030506122025091734354345021517193438410201133335434523101121273139430310112236390802171920344521050822283342371619232541450312182021253442091829323843201014153236420302042125333617071720324445331623253336394006121317324424010609161728240917193035420403041617192023040914263144391617343642450305142730394335131521293943330509162326452103052034354416010514183237040213343842451606081421303745182426293438320108193439434101131433344325011017293143150102152834453815202329394202051314224445330308132732421003141720243134051314202425360108182429333505252729343633051617202641241116192229362614193643444501050829303544380208142529452410141821363705010910122140370110192024402304162325354027051016242735330203222730402911121421323806020507141640040515212526303105121926274438032225293244191121243039452617203536414321161824424445170709152627421808111416182113152637424345091113151725342604081925274507011113242840070622293743452305222931343943061022313540190102081726372701051012162011101522242742190415283337402511222432363807071219212932090407101931402601263134404320010809172932450716182023260316172837394015101118222839300103070824424309162840414321011320222528151115202631350718203134404530121317222533081015202342440701020917194220092127344143020612183138430905091519223632101422242837260520212433403601021025264404071221242736450607131624250109202122303716060921313240380103183240411611142235373905040739414245400209152334400302141522234443071720263040240506081122264404051420224344111315262834310211131428300704091029313427061126272844300815192134441201172728294005101126313444300810142733380304171827394319060715242830211216192237400803232834394216010316183034441822253138450602030511273933192329333543270313202433373508162630384542091420223334281116293841442106122026293845172030313740251022283436440201232830343509252729363840410406101920441411132335434517132021303945320111121426350602070809173334030713274041360310202635433606141921233113121520243038290810183032342712243338404230132527343841100419202630352401071218232744081018232740330409103236401804061014254012081128304345411118263137404303202432374504232931333444400612153442440401081113223831041013233244200212141724403908131528374317042122343738331016203941422706132937394143162526313643440813202223363404131831334543010914162129030912131537382714252932334537182930373943080823252735442403051017303116030423294041200110162425354312151922283405010327283245111722262736392001022325384043040825273741210208173031382502040815202711020726294043420817353639420422273135374042202226333637250507081530432204132227344406041320293641391920232443441313142432394103052023273540430304122024344101041017314202062228323440260105273034364006142226434431072022253840440609112224303112133233404104052731343543371225293542432412293233394042030714232642240405091326270105082123273312011520263542090211121523370802082341434430010912283641101423303234380606081316304303042227283840010307182932361904051314374111010437384045071011293841452111232629394422071417203539310112223233423805172531394010182024273142391623272933412201050921273545161723242944030914151731332310242629373832111214151839340708183237431212232630364311061018313234110319223142432603121315343614081326283234430506192641453413182631344412051721253644100424252734350208172027374306060715223439280112132132451429313538404417010714203437410306202427442501102032354043020717282939371314173241420611172124263612122023283044430420262835403112151926404329111225324445230104202329452805071837424520041113172031330510161731322114192526273402041018274045380405062526434101101516324128010317203144400306132324350101122627293342111821263843290313183337450102042034354314141516192543020208203033340610111525354113161722313437330512143234421605072022374239050709113235330305142042443302121433404125081727334044240718303940413606071016384104020712152134051421293132371702081522254130060828333839222030363841452308131430383905020506132844430910132433382802081325283703082428353840050304121425431708102324354337041224333845220512172934352705111427293644021619313435371314222730380202192526274328020618213334300102070910384201050614203922081423363839130408181939444104082734394013141820232836330222273336371406091819253340070811164144350821253940441810171819232735051318234045030405111224272808162530424315060813303540210216173239454001020616194209091516212834240713303941452501071926273516030607202139131314263340431502092225314512010712152342111928313843440108172124273115010204233134081518213235440609121920394113041011122027381113252629333206071516203126031622373844230718222431340606152223253240141518212635231118213637431208171824394532152431323340130513172328360801041626404131020924414345300516212324302913192837384304032122334142200304071131413511121626294418031315404144200506262738390116212631364306073738394044180307141631403910141939404323081925283236370718192729424504092333394414020312202738400506091115372603050819384220102033364144050506111738441302040611172816151725374243131214152427320307082029333809111826274041250709101331352408212831364543071017293344050910142527311101081115184507010817343945271215243641444204050612253745030507142634350410192932423021242729434407172327353843020613202728401501111517253940060712283840180712152425431301081013284245051522233435020717193036383424253334383943152733354345160311141532364401061128344230071520253343120418263334381401071618343821020508113339310311132133371804050816212903112328293044130310141636383503131624262909102831334144210104082333424501061722284523030406102830370212192439443502101619344501101830363944320304092425331011152435374542172030313345190205151819234401072233374020020727334144100206131629302102111925283244041120233239400408131920432601122934363741012835414344311214213039434520303335364422020833353741140607192141433801112123344424070810192131200306103034373611172126364516041014151822390207132542453902040517273243112432333540130616373841451805101327374104021117182127061315182427411123272838424336072229333435300408091617193105212734444516081013363740061519213441441010151821344143010203091223100312333642452507091214232817031013223132291214242634454101021519243612030416202844170416203340430702171924374103020817242931321314262830363710141618272804060711173344010509123039432409333640424332102227314243120407112442453001031221264116030816323443100722243134361501030812424333093034353941210515203134422207272930384404050711164145040109122339433406101718212930050611142141320812192131354412151828344209111229333842170809182128402006121721343718062135363741110612192434410415171921274516111618192439430618313438452014151617384536031023243139220406152526334012151620243038050613162728090210111935392902060712194538030819273041120210123133423202071925293616101521353843310607181930381303101326343836012126364041050522313239453602101422323641121723344245330104101228452617252837434402101112182442270509142630430201101326323609031213183132421420233137382706101825343533152131324143240611151723403905101321394311081119213645250103121416431011303435424427022128384245301721252627360412181929313907030912132543341415252829300316253338404515102122303542060112132429441609182024273612121824263940150709242934382608152131333842131624253336420511122933441404071329313918040531354345290506161837381703101619313909131419264043301218303941421906081835424303091013283845350109111426281902252830334506091417333638200309111213193502041128294327051114303338241426323639423819213033344204070813153345180116293340450605183041434513121626283042220102162238393405131729343903162024283639051418222631444011172830333509020823262744132025313236430308151719434407102440414344170610162834384309133238394323082235383941240408182527324211171921222524103438404243321621283539431203071013253632031522323345020915293437391214171922244041121728414344250206202737390421253032404231020612263034380204303233432903051213333938011519232842321922303439443605162126344224051718222343120206111625310301041014153520071719232445380418202627320918343943444523091832333744220414232837451701032427394531192328374245020814172736451003071231343832031329383942260104141829370609132831394119040917182642360115172325411019323740414345162631383941230512252638452306071222263629182128353742170819202133393707131618353814051820233034210719232436393002151621222845020608264345110304162738402002051428313220212729384044370316212223443007242930343533011117273539310405121432423505081821223810061416212737401619243342442702061113223714062122323536170103232427433407111231333805091417184244350203263334432905071222284101020613172743360317182336412603113442434413132432343942041016182025310604152238414326030410202844300709121519230408212538394428141523253543320106153637380523272931364537010330333639120410203238441807111317182943021013222940260408101631360904112839424506031520222441111214252739403510121835424339010813364445390213161932334209101530333726091819303440200308172027352613183031384105142135364044300304152228401002123031394338041222243341380709222737423401092628304132040923262933081011202125414004152435364001020910163537010114152440413502182430324514112029313342430118283134434006121923344235062136383943300213252829363401212529343736010613373840090205121424393303091029404507091116212836050206171821260703061723373926222631374142240102111639443207080917222405041214253537020209101422441601071532344208071116212733240313162324351427363741434532050713202144331323263135431503102335363718172123303444190710162841424002041523293807021320303141271718212729332602042526363728131825313344381220263344452406141618244244010308242735280104132938390706111524323928040714162444201317182042454101030914182834020819223242390610121420421517253335384515010429394345310715303739441808131824272917081115161737360811161921254009113031414433152329344044200912152534360301091226353842051118203545032122263436413203111418262721142331333740441526283441424412182223303432031921253745350104131734390612272938414506121517242945160506112942452810141618293525091820223844100809202529330705121331324134141627353945050507121318352312303237394124020511172429090607223235361901061219364228031115203544102631323338401109143435414202020522323445390214152227333107162427374402020306193639260816262931361106070911171845051415233443040305122226311912172026283604061415192141370716252935362802203340424432061217213239300305132021371706123135384317212630323335440517262735380122262930344515141927283045330407121422333113202432364529081319274045121123253032404207102225344027031024333845360424273537451520313240414512030622232438300306091822351403181923324524061116192132450710192328331804071926333503011018222831440306142230413601021121303539161820233243270618283032381501062027284115012324354445100307093336371004081730404334061011143638430408182437450613162331364438010916232438172126273234423103071415223817081213293342050407171838443611162527353637131418213444161121223039443104183137424340121921294045010620232428304407181926334537101722303543440607152226404108142829344012011216192343341433343537400412162124414315032028384043041726293031431206071328364241131422263738201012293140440201072130353802061634373940110103042942453606143031404129071926373944271012131933400203071120224124031330334345041620263642442411132021324408101619323338030712233234360815161725303132030409303336071113141516450301091213204503021926313841340624313238440803062130343522131921243435260308173033342806142533404430040509113740071015243031373201050816283345051011172834221519212527284001020614273833060719283441051314202829342303070913192423010613192133042133353842440104091215334526141619202934350512153037401807102229313815071112212635200208283037412210161727283606030412152634060211313337443206111719404328071124262737320306131516223208151921323638080918353945250203091527290830313235363705010910133544050408222632382710161927373813303134394145070507122025262821252732373820030927283839070713183639451902122024344237202122252829060213151633430417182325383922060727293845171423252729421608233135394024092124303337290512242639422003132834384225030607111217190709244042444501051820303503081114173639220304060832423107091121303529030715161943210506112743441703161824404421061218374041030810142033412801132125283122041517232736311416232531374206172228293238020813162328350513262937404203041219222709091929353738310709192326453301041112204102101623363940110609161924281703131524333702031527333436370812152940451401050726284330263033383941211624253031320701020416203245070924273536370512213337400703061829353924081628303144270104162331410201031726274223102224273845110627303638422502172035373924010709172738312326273538401005082531414445051125273638021015192730331413151921444539031014152324250810152029314103283132424525010215283945310222252834431606131828303609041117223241341618203233392609182127444528080919254142330406131726284101141634414413242930313544011213293437421603080922284245041314183138151215192224360302072025374029011519313543270607111539432012182129343810102023343740360213183238422211132232333608111319203144270713162324430902041016314109091824384344350113182634382504052528324212162223242728060814212242452416182736384222";
-const FIRST=new Date(Date.UTC(2002,11,7));
-const STORE="lotto645-extra-v1";
+            <p class="foot" id="source"></p>
+        </div>
 
-const base=[];
-for(let i=0;i<RAW.length;i+=14){
-  const a=[];for(let j=0;j<7;j++)a.push(+RAW.substr(i+j*2,2));
-  base.push({r:base.length+1,n:a.slice(0,6),b:a[6]});
-}
-let extra=[];
-try{const s=localStorage.getItem(STORE);if(s)extra=JSON.parse(s)||[];}catch(e){extra=[];}
-let draws=[];
-function rebuild(){
-  draws=base.slice();
-  extra.sort((x,y)=>x.r-y.r).forEach(d=>{if(d.r===draws.length+1)draws.push({r:d.r,n:d.n.slice().sort((a,b)=>a-b),b:d.b,user:true});});
-}
-rebuild();
-const BASE_LAST=base.length;
+        <script type="module">
+            /* ============================================================
+   설정: Firebase 프로젝트를 만든 뒤 아래 두 값을 채우세요.
+   비워 두면 이 브라우저에만 저장하는 모드로 동작해요.
+   ============================================================ */
+            const FIREBASE_CONFIG = {
+                apiKey: "AIzaSyBkPYNaC2hYIXJmNECvu3d1h-4VnlrkBSw",
+                authDomain: "lotto6-korea.firebaseapp.com",
+                projectId: "lotto6-korea",
+                storageBucket: "lotto6-korea.firebasestorage.app",
+                messagingSenderId: "418044634682",
+                appId: "1:418044634682:web:5bd9f240f97a33ac857703",
+            }; // 예: { apiKey: "...", authDomain: "...", projectId: "...", appId: "..." }
+            const ADMIN_EMAIL = "shyboy0113@gmail.com"; // 새 당첨번호를 등록할 관리자 구글 계정, 예: "me@gmail.com"
+            /* ============================================================ */
 
-const dateOf=r=>new Date(FIRST.getTime()+(r-1)*7*864e5);
-const fmt=d=>d.getUTCFullYear()+"."+String(d.getUTCMonth()+1).padStart(2,"0")+"."+String(d.getUTCDate()).padStart(2,"0");
-const fmtLong=d=>d.getUTCFullYear()+"년 "+(d.getUTCMonth()+1)+"월 "+d.getUTCDate()+"일 (토) 추첨";
-const cls=n=>"c"+(n<=10?1:n<=20?2:n<=30?3:n<=40?4:5);
-const ball=(n,sm)=>`<span class="ball ${cls(n)}${sm?" sm":""}">${n}</span>`;
-const ballsHTML=(ns,b,sm)=>ns.map(n=>ball(n,sm)).join("")+(b?`<span class="plus" aria-label="보너스">+</span>${ball(b,sm)}`:"");
-const $=id=>document.getElementById(id);
+            const FB_VERSION = "10.12.2";
+            const RAW =
+                "102329333740160913212532420211161921273130142730314042021624294041420314152627404234020916252640420819253437390902041617363914092530334144060107363741421402112125394544222325373842260206123133401503041630313713060724373840330304091732370103121319323529063038394043261014182023304106121718313221040506081739250513171833424407082729364306020421264344160405071820253101202628374327091823253537010105133439401108172035364404070918232835320614192534441104073233404109092635374042020203112637433901102326284031072730333537421617223037433606071315214308071318192526061320233538433417181921233201063135383944010311213038453901102027333517081315233138391417263136452706101826373803040716193340300210121522440102031116264435020415162029010708143233394201082127363937172131374044071014303133371907101625294406102425334044010629363941451302082536394211141519303843080308152729352103202336384005141518212636390425333640433902030717222445030710153638331012151626393805081415193935051922252843260509121629412102041117262701031218324043380615171835402302052432344428010315222537430218293243443710132529333538031224273032141718242526300105071113203306010203142742390610151719341416232734424511060813233136210212373941453304121623344326011720243041270426282933403717202935384410012124262942270314243335361706222436384419053234404145060817273134431401030821223120060714152036030609162324324301031027293711010711233742060103173235450817222426354042051415273045101732333442443508102034414528041012222433290104050609311707182223294412010534364244330720222329430107183133364027262930334142430409283336452611141926284102010206092528310204253134371705102234364435030410171922380311131417213804061011323730122830343843090111161736400807171828304527041623252942010208323335361807202227404301030510293243351230343637453919232528384217071924274245310810111415213703172334414543040715182326130312202331354306142228353916021630364142110709202536391510112728373919091115202843130313171819280808122931424302121630344044192627284243450804151726363743020313202744090219273541422504061321404236212533343536170211213441422702182528373916010210131819150105132629344303081112133633061921354045201619203233410405182830424502192630333539370409131821340701183041424332030708343941012234364042454401052125384124071126282944160609101139412705131819224231091227363945142427283036390403103140424330162735374345190211131531421004162529343501041921242641350309243033341813141822353916192628313336170417303233341501101316374306010511121823090509172539433202152021293422142123324045441315272934403502182434404205010206162033410102040819381404101419214509010208182938421924273031343608143235374528081418303144150506242532370804081118374533061418263639131520232639442807101922354031353637414445300712163442450412192025414502142122253036430506131417200703112438394426121427333944170103112430320703121435404505010321293537300102031520254303111431323738142531344044240207182024333710192223253739121317203341081112182131380802030405202442050720252837320203071543440407161733364001162027333539380108141829442004112026353716051119213443310220333537401005072829394344010318202627380419262730420705111319313607020608142122340405151622420217253536394423040509112338350511142932331205101931444527080910122444350406131728403913212224263704212226273137080104081337390701111721244433020415283134351115243941440706101640414321021624272835210419202132344302121719284234131625363738190911273132382213182123263915121528363940130308172338451303082731414411192330374345380607192528384514232631394528081925313436330105192024302701050624274232041114212343320613273132370414273031384017040514354245340712152437404306111618314302091224252931360127283237401809162736414405050934373839120304091122423707082434364101031019243245120518203642433205091220212627030809272940360709122739432801082431344406131415263539251419203538402604152133394125101213152529200311373941431307163136373811101123243637350103040614411202051018313230060818313845420207152430452813333740414502011519404244170612242735374101121728354110031433373842100813183239450703070818204245171831323334100109172129332406101730373840010412161838080308152730454406111920283234050927293740190103202536452407091012263839071113333743261319203238420402141730384543041016263341380708182123390904182330344119051521232545121415171937454001020511183622010519283441160412242728321002030506122025091734354345021517193438410201133335434523101121273139430310112236390802171920344521050822283342371619232541450312182021253442091829323843201014153236420302042125333617071720324445331623253336394006121317324424010609161728240917193035420403041617192023040914263144391617343642450305142730394335131521293943330509162326452103052034354416010514183237040213343842451606081421303745182426293438320108193439434101131433344325011017293143150102152834453815202329394202051314224445330308132732421003141720243134051314202425360108182429333505252729343633051617202641241116192229362614193643444501050829303544380208142529452410141821363705010910122140370110192024402304162325354027051016242735330203222730402911121421323806020507141640040515212526303105121926274438032225293244191121243039452617203536414321161824424445170709152627421808111416182113152637424345091113151725342604081925274507011113242840070622293743452305222931343943061022313540190102081726372701051012162011101522242742190415283337402511222432363807071219212932090407101931402601263134404320010809172932450716182023260316172837394015101118222839300103070824424309162840414321011320222528151115202631350718203134404530121317222533081015202342440701020917194220092127344143020612183138430905091519223632101422242837260520212433403601021025264404071221242736450607131624250109202122303716060921313240380103183240411611142235373905040739414245400209152334400302141522234443071720263040240506081122264404051420224344111315262834310211131428300704091029313427061126272844300815192134441201172728294005101126313444300810142733380304171827394319060715242830211216192237400803232834394216010316183034441822253138450602030511273933192329333543270313202433373508162630384542091420223334281116293841442106122026293845172030313740251022283436440201232830343509252729363840410406101920441411132335434517132021303945320111121426350602070809173334030713274041360310202635433606141921233113121520243038290810183032342712243338404230132527343841100419202630352401071218232744081018232740330409103236401804061014254012081128304345411118263137404303202432374504232931333444400612153442440401081113223831041013233244200212141724403908131528374317042122343738331016203941422706132937394143162526313643440813202223363404131831334543010914162129030912131537382714252932334537182930373943080823252735442403051017303116030423294041200110162425354312151922283405010327283245111722262736392001022325384043040825273741210208173031382502040815202711020726294043420817353639420422273135374042202226333637250507081530432204132227344406041320293641391920232443441313142432394103052023273540430304122024344101041017314202062228323440260105273034364006142226434431072022253840440609112224303112133233404104052731343543371225293542432412293233394042030714232642240405091326270105082123273312011520263542090211121523370802082341434430010912283641101423303234380606081316304303042227283840010307182932361904051314374111010437384045071011293841452111232629394422071417203539310112223233423805172531394010182024273142391623272933412201050921273545161723242944030914151731332310242629373832111214151839340708183237431212232630364311061018313234110319223142432603121315343614081326283234430506192641453413182631344412051721253644100424252734350208172027374306060715223439280112132132451429313538404417010714203437410306202427442501102032354043020717282939371314173241420611172124263612122023283044430420262835403112151926404329111225324445230104202329452805071837424520041113172031330510161731322114192526273402041018274045380405062526434101101516324128010317203144400306132324350101122627293342111821263843290313183337450102042034354314141516192543020208203033340610111525354113161722313437330512143234421605072022374239050709113235330305142042443302121433404125081727334044240718303940413606071016384104020712152134051421293132371702081522254130060828333839222030363841452308131430383905020506132844430910132433382802081325283703082428353840050304121425431708102324354337041224333845220512172934352705111427293644021619313435371314222730380202192526274328020618213334300102070910384201050614203922081423363839130408181939444104082734394013141820232836330222273336371406091819253340070811164144350821253940441810171819232735051318234045030405111224272808162530424315060813303540210216173239454001020616194209091516212834240713303941452501071926273516030607202139131314263340431502092225314512010712152342111928313843440108172124273115010204233134081518213235440609121920394113041011122027381113252629333206071516203126031622373844230718222431340606152223253240141518212635231118213637431208171824394532152431323340130513172328360801041626404131020924414345300516212324302913192837384304032122334142200304071131413511121626294418031315404144200506262738390116212631364306073738394044180307141631403910141939404323081925283236370718192729424504092333394414020312202738400506091115372603050819384220102033364144050506111738441302040611172816151725374243131214152427320307082029333809111826274041250709101331352408212831364543071017293344050910142527311101081115184507010817343945271215243641444204050612253745030507142634350410192932423021242729434407172327353843020613202728401501111517253940060712283840180712152425431301081013284245051522233435020717193036383424253334383943152733354345160311141532364401061128344230071520253343120418263334381401071618343821020508113339310311132133371804050816212903112328293044130310141636383503131624262909102831334144210104082333424501061722284523030406102830370212192439443502101619344501101830363944320304092425331011152435374542172030313345190205151819234401072233374020020727334144100206131629302102111925283244041120233239400408131920432601122934363741012835414344311214213039434520303335364422020833353741140607192141433801112123344424070810192131200306103034373611172126364516041014151822390207132542453902040517273243112432333540130616373841451805101327374104021117182127061315182427411123272838424336072229333435300408091617193105212734444516081013363740061519213441441010151821344143010203091223100312333642452507091214232817031013223132291214242634454101021519243612030416202844170416203340430702171924374103020817242931321314262830363710141618272804060711173344010509123039432409333640424332102227314243120407112442453001031221264116030816323443100722243134361501030812424333093034353941210515203134422207272930384404050711164145040109122339433406101718212930050611142141320812192131354412151828344209111229333842170809182128402006121721343718062135363741110612192434410415171921274516111618192439430618313438452014151617384536031023243139220406152526334012151620243038050613162728090210111935392902060712194538030819273041120210123133423202071925293616101521353843310607181930381303101326343836012126364041050522313239453602101422323641121723344245330104101228452617252837434402101112182442270509142630430201101326323609031213183132421420233137382706101825343533152131324143240611151723403905101321394311081119213645250103121416431011303435424427022128384245301721252627360412181929313907030912132543341415252829300316253338404515102122303542060112132429441609182024273612121824263940150709242934382608152131333842131624253336420511122933441404071329313918040531354345290506161837381703101619313909131419264043301218303941421906081835424303091013283845350109111426281902252830334506091417333638200309111213193502041128294327051114303338241426323639423819213033344204070813153345180116293340450605183041434513121626283042220102162238393405131729343903162024283639051418222631444011172830333509020823262744132025313236430308151719434407102440414344170610162834384309133238394323082235383941240408182527324211171921222524103438404243321621283539431203071013253632031522323345020915293437391214171922244041121728414344250206202737390421253032404231020612263034380204303233432903051213333938011519232842321922303439443605162126344224051718222343120206111625310301041014153520071719232445380418202627320918343943444523091832333744220414232837451701032427394531192328374245020814172736451003071231343832031329383942260104141829370609132831394119040917182642360115172325411019323740414345162631383941230512252638452306071222263629182128353742170819202133393707131618353814051820233034210719232436393002151621222845020608264345110304162738402002051428313220212729384044370316212223443007242930343533011117273539310405121432423505081821223810061416212737401619243342442702061113223714062122323536170103232427433407111231333805091417184244350203263334432905071222284101020613172743360317182336412603113442434413132432343942041016182025310604152238414326030410202844300709121519230408212538394428141523253543320106153637380523272931364537010330333639120410203238441807111317182943021013222940260408101631360904112839424506031520222441111214252739403510121835424339010813364445390213161932334209101530333726091819303440200308172027352613183031384105142135364044300304152228401002123031394338041222243341380709222737423401092628304132040923262933081011202125414004152435364001020910163537010114152440413502182430324514112029313342430118283134434006121923344235062136383943300213252829363401212529343736010613373840090205121424393303091029404507091116212836050206171821260703061723373926222631374142240102111639443207080917222405041214253537020209101422441601071532344208071116212733240313162324351427363741434532050713202144331323263135431503102335363718172123303444190710162841424002041523293807021320303141271718212729332602042526363728131825313344381220263344452406141618244244010308242735280104132938390706111524323928040714162444201317182042454101030914182834020819223242390610121420421517253335384515010429394345310715303739441808131824272917081115161737360811161921254009113031414433152329344044200912152534360301091226353842051118203545032122263436413203111418262721142331333740441526283441424412182223303432031921253745350104131734390612272938414506121517242945160506112942452810141618293525091820223844100809202529330705121331324134141627353945050507121318352312303237394124020511172429090607223235361901061219364228031115203544102631323338401109143435414202020522323445390214152227333107162427374402020306193639260816262931361106070911171845051415233443040305122226311912172026283604061415192141370716252935362802203340424432061217213239300305132021371706123135384317212630323335440517262735380122262930344515141927283045330407121422333113202432364529081319274045121123253032404207102225344027031024333845360424273537451520313240414512030622232438300306091822351403181923324524061116192132450710192328331804071926333503011018222831440306142230413601021121303539161820233243270618283032381501062027284115012324354445100307093336371004081730404334061011143638430408182437450613162331364438010916232438172126273234423103071415223817081213293342050407171838443611162527353637131418213444161121223039443104183137424340121921294045010620232428304407181926334537101722303543440607152226404108142829344012011216192343341433343537400412162124414315032028384043041726293031431206071328364241131422263738201012293140440201072130353802061634373940110103042942453606143031404129071926373944271012131933400203071120224124031330334345041620263642442411132021324408101619323338030712233234360815161725303132030409303336071113141516450301091213204503021926313841340624313238440803062130343522131921243435260308173033342806142533404430040509113740071015243031373201050816283345051011172834221519212527284001020614273833060719283441051314202829342303070913192423010613192133042133353842440104091215334526141619202934350512153037401807102229313815071112212635200208283037412210161727283606030412152634060211313337443206111719404328071124262737320306131516223208151921323638080918353945250203091527290830313235363705010910133544050408222632382710161927373813303134394145070507122025262821252732373820030927283839070713183639451902122024344237202122252829060213151633430417182325383922060727293845171423252729421608233135394024092124303337290512242639422003132834384225030607111217190709244042444501051820303503081114173639220304060832423107091121303529030715161943210506112743441703161824404421061218374041030810142033412801132125283122041517232736311416232531374206172228293238020813162328350513262937404203041219222709091929353738310709192326453301041112204102101623363940110609161924281703131524333702031527333436370812152940451401050726284330263033383941211624253031320701020416203245070924273536370512213337400703061829353924081628303144270104162331410201031726274223102224273845110627303638422502172035373924010709172738312326273538401005082531414445051125273638021015192730331413151921444539031014152324250810152029314103283132424525010215283945310222252834431606131828303609041117223241341618203233392609182127444528080919254142330406131726284101141634414413242930313544011213293437421603080922284245041314183138151215192224360302072025374029011519313543270607111539432012182129343810102023343740360213183238422211132232333608111319203144270713162324430902041016314109091824384344350113182634382504052528324212162223242728060814212242452416182736384222";
+            const FIRST = Date.UTC(2002, 11, 7);
+            const $ = (id) => document.getElementById(id);
 
-/* ---------- stats ---------- */
-function stats(range){
-  const ds=range==="all"?draws:draws.slice(-range);
-  const L=draws.length;
-  const s=[];for(let i=0;i<=45;i++)s.push({n:i,main:0,bonus:0,last:0});
-  ds.forEach(d=>{d.n.forEach(x=>s[x].main++);s[d.b].bonus++;});
-  draws.forEach(d=>{d.n.forEach(x=>s[x].last=d.r);});
-  s.forEach(o=>{o.total=o.main+o.bonus;o.rate=ds.length?o.main/ds.length:0;o.gap=o.last?L-o.last:L;});
-  return {rows:s.slice(1),count:ds.length};
-}
+            const base = [];
+            for (let i = 0; i < RAW.length; i += 14) {
+                const a = [];
+                for (let j = 0; j < 7; j++) a.push(+RAW.substr(i + j * 2, 2));
+                base.push({ r: base.length + 1, n: a.slice(0, 6), b: a[6] });
+            }
+            const BASE_LAST = base.length;
 
-/* ---------- generators ---------- */
-function weightedPick(w){
-  const pool=[];for(let i=1;i<=45;i++)pool.push(i);
-  const out=[];
-  while(out.length<6){
-    let tot=0;pool.forEach(n=>tot+=w[n]);
-    let x=Math.random()*tot,k=0;
-    for(;k<pool.length;k++){x-=w[pool[k]];if(x<=0)break;}
-    if(k>=pool.length)k=pool.length-1;
-    out.push(pool.splice(k,1)[0]);
-  }
-  return out.sort((a,b)=>a-b);
-}
-function zWeights(vals,k){ // vals indexed 1..45 -> sharpened weights
-  const v=vals.slice(1),m=v.reduce((a,b)=>a+b,0)/45;
-  const sd=Math.sqrt(v.reduce((a,b)=>a+(b-m)*(b-m),0)/45)||1;
-  const w=[0];for(let i=1;i<=45;i++)w.push(Math.exp(k*(vals[i]-m)/sd));
-  return w;
-}
-const pastSet=()=>new Set(draws.map(d=>d.n.join(",")));
-function balanced(set){
-  const odd=set.filter(x=>x%2).length, low=set.filter(x=>x<=22).length, sum=set.reduce((a,b)=>a+b,0);
-  let run=0;for(let i=1;i<6;i++)if(set[i]===set[i-1]+1)run++;
-  return odd>=2&&odd<=4&&low>=2&&low<=4&&sum>=100&&sum<=175&&run<=1;
-}
-function draw(w,mustBalance){
-  const past=pastSet();
-  for(let t=0;t<500;t++){
-    const s=weightedPick(w);
-    if(past.has(s.join(",")))continue;
-    if(mustBalance&&!balanced(s))continue;
-    return s;
-  }
-  return weightedPick(w);
-}
-function generate(){
-  const all=stats("all").rows, rec=stats(50).rows;
-  const F=[0],R=[0],G=[0];
-  all.forEach(o=>{F[o.n]=o.main;G[o.n]=o.gap;});
-  rec.forEach(o=>{R[o.n]=o.main;});
-  const wF=zWeights(F,1.2), wR=zWeights(R,1.0), wG=zWeights(G.map(g=>Math.log(1+g)),1.2);
-  const wB=[0];for(let i=1;i<=45;i++)wB.push(Math.sqrt(wF[i]*wR[i])+0.6*wG[i]);
-  const uni=[0];for(let i=1;i<=45;i++)uni.push(1);
-  const avg=(set,arr)=>Math.round(set.reduce((a,x)=>a+arr[x],0)/6*10)/10;
-  const out={
-    balanced:draw(wB,true), freq:draw(wF,false), recent:draw(wR,false), cold:draw(wG,false), random:weightedPick(uni)
-  };
-  const m=a=>Math.round(a.slice(1).reduce((x,y)=>x+y,0)/45*10)/10;
-  out.why={
-    balanced:set=>`홀짝 ${set.filter(x=>x%2).length}:${set.filter(x=>!(x%2)).length}, 저번호(1~22) ${set.filter(x=>x<=22).length}개, 합계 ${set.reduce((a,b)=>a+b,0)}`,
-    freq:set=>`고른 번호의 평균 누적 출현 ${avg(set,F)}회 (전체 평균 ${m(F)}회)`,
-    recent:set=>`고른 번호의 최근 50회 평균 출현 ${avg(set,R)}회 (전체 평균 ${m(R)}회)`,
-    cold:set=>`고른 번호의 평균 미출현 ${avg(set,G)}회째 (전체 평균 ${m(G)}회)`,
-    random:()=>`비교용으로 통계를 쓰지 않고 뽑은 번호`
-  };
-  return out;
-}
-const METHODS=[
-  {k:"balanced",t:"균형 분석",d:"누적·최근 출현과 미출현 기간을 함께 반영하고, 홀짝·고저·합계가 치우치지 않은 조합만 남겨요.",main:true},
-  {k:"freq",t:"많이 나온 번호",d:"1회부터 지금까지 당첨번호로 자주 나온 번호일수록 뽑힐 가능성을 높였어요."},
-  {k:"recent",t:"최근 흐름",d:"최근 50회 동안 자주 나온 번호에 가중치를 줬어요."},
-  {k:"cold",t:"오래 안 나온 번호",d:"마지막으로 나온 뒤 오래 쉬고 있는 번호일수록 가중치를 줬어요."},
-  {k:"random",t:"완전 무작위",d:"모든 번호를 같은 확률로 뽑아요."}
-];
-function renderPredict(){
-  const next=draws.length+1;
-  $("nextNo").textContent=next;
-  $("nextDate").textContent=fmtLong(dateOf(next));
-  const g=generate();
-  $("heroBalls").innerHTML=g.balanced.map(n=>ball(n)).join("");
-  $("heroMeta").textContent="균형 분석 · "+g.why.balanced(g.balanced);
-  $("methods").innerHTML=METHODS.map(m=>`<div class="method${m.main?" main":""}">
+            /* ---------- storage: local or Firebase ---------- */
+            const LKEY_D = "lotto645-extra-v1",
+                LKEY_T = "lotto645-tickets-v1";
+            const lget = (k) => {
+                try {
+                    return JSON.parse(localStorage.getItem(k) || "[]") || [];
+                } catch (e) {
+                    return [];
+                }
+            };
+            const lset = (k, v) => {
+                try {
+                    localStorage.setItem(k, JSON.stringify(v));
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            };
+
+            const store = {
+                mode: FIREBASE_CONFIG ? "cloud" : "local",
+                user: null,
+                isAdmin: !FIREBASE_CONFIG,
+                ready: false,
+                fb: null,
+            };
+            let extraDraws = [],
+                tickets = [];
+
+            async function initStore() {
+                if (!FIREBASE_CONFIG) {
+                    store.ready = true;
+                    extraDraws = lget(LKEY_D);
+                    tickets = lget(LKEY_T);
+                    return;
+                }
+                store.mode = "cloud";
+                store.isAdmin = false;
+                try {
+                    const u = (f) => `https://www.gstatic.com/firebasejs/${FB_VERSION}/${f}`;
+                    const [app, auth, fs] = await Promise.all([
+                        import(u("firebase-app.js")),
+                        import(u("firebase-auth.js")),
+                        import(u("firebase-firestore.js")),
+                    ]);
+                    const a = app.initializeApp(FIREBASE_CONFIG);
+                    const fb = { auth: auth.getAuth(a), db: fs.getFirestore(a), A: auth, F: fs };
+                    store.fb = fb;
+                    auth.getRedirectResult(fb.auth).catch(() => {});
+                    await loadCloudDraws();
+                    store.ready = true;
+                    auth.onAuthStateChanged(fb.auth, async (user) => {
+                        store.user = user;
+                        store.isAdmin = !!(
+                            user &&
+                            ADMIN_EMAIL &&
+                            user.email &&
+                            user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()
+                        );
+                        tickets = [];
+                        if (user) await loadCloudTickets();
+                        refreshAll();
+                    });
+                } catch (e) {
+                    console.error(e);
+                    store.mode = "error";
+                    store.ready = true;
+                }
+            }
+            async function loadCloudDraws() {
+                const { db, F } = store.fb;
+                const snap = await F.getDocs(F.collection(db, "draws"));
+                extraDraws = snap.docs.map((d) => d.data()).filter((d) => d && Array.isArray(d.n));
+            }
+            async function loadCloudTickets() {
+                const { db, F } = store.fb;
+                const snap = await F.getDocs(F.collection(db, "users", store.user.uid, "tickets"));
+                tickets = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+            }
+            async function saveDraw(d) {
+                if (store.mode === "local") {
+                    extraDraws.push(d);
+                    return lset(LKEY_D, extraDraws);
+                }
+                const { db, F } = store.fb;
+                await F.setDoc(F.doc(db, "draws", String(d.r)), { r: d.r, n: d.n, b: d.b, at: F.serverTimestamp() });
+                extraDraws.push(d);
+                return true;
+            }
+            async function removeDraw(r) {
+                if (store.mode === "local") {
+                    extraDraws = extraDraws.filter((d) => d.r !== r);
+                    return lset(LKEY_D, extraDraws);
+                }
+                const { db, F } = store.fb;
+                await F.deleteDoc(F.doc(db, "draws", String(r)));
+                extraDraws = extraDraws.filter((d) => d.r !== r);
+                return true;
+            }
+            async function saveTicket(t) {
+                t.at = Date.now();
+                if (store.mode === "local") {
+                    t.id = "t" + t.at + Math.random().toString(36).slice(2, 6);
+                    tickets.push(t);
+                    return lset(LKEY_T, tickets);
+                }
+                const { db, F } = store.fb;
+                const ref = await F.addDoc(F.collection(db, "users", store.user.uid, "tickets"), {
+                    r: t.r,
+                    n: t.n,
+                    src: t.src || "",
+                    at: t.at,
+                });
+                tickets.push({ ...t, id: ref.id });
+                return true;
+            }
+            async function removeTicket(id) {
+                if (store.mode === "local") {
+                    tickets = tickets.filter((t) => t.id !== id);
+                    return lset(LKEY_T, tickets);
+                }
+                const { db, F } = store.fb;
+                await F.deleteDoc(F.doc(db, "users", store.user.uid, "tickets", id));
+                tickets = tickets.filter((t) => t.id !== id);
+                return true;
+            }
+            async function signIn() {
+                const { auth, A } = store.fb;
+                const p = new A.GoogleAuthProvider();
+                try {
+                    await A.signInWithPopup(auth, p);
+                } catch (e) {
+                    if (
+                        e &&
+                        (e.code === "auth/popup-blocked" ||
+                            e.code === "auth/operation-not-supported-in-this-environment")
+                    )
+                        await A.signInWithRedirect(auth, p);
+                    else if (e && e.code !== "auth/popup-closed-by-user" && e.code !== "auth/cancelled-popup-request")
+                        alert(
+                            "로그인하지 못했어요. 카카오톡 등 앱 안의 브라우저라면 크롬이나 사파리에서 다시 열어 주세요.\n(" +
+                                (e.code || e.message) +
+                                ")",
+                        );
+                }
+            }
+            const signOutNow = () => store.fb.A.signOut(store.fb.auth);
+            const canWriteTickets = () => store.mode === "local" || (store.mode === "cloud" && !!store.user);
+            const errText = (e) =>
+                e && e.code === "permission-denied"
+                    ? "저장 권한이 없어요. 관리자 계정과 Firebase 보안 규칙을 확인하세요."
+                    : "저장하지 못했어요. 잠시 후 다시 시도하세요.";
+
+            /* ---------- draws ---------- */
+            let draws = [];
+            function rebuild() {
+                draws = base.slice();
+                extraDraws
+                    .slice()
+                    .sort((x, y) => x.r - y.r)
+                    .forEach((d) => {
+                        if (d.r === draws.length + 1)
+                            draws.push({ r: d.r, n: d.n.slice().sort((a, b) => a - b), b: d.b, user: true });
+                    });
+            }
+
+            const dateOf = (r) => new Date(FIRST + (r - 1) * 7 * 864e5);
+            const fmt = (d) =>
+                d.getUTCFullYear() +
+                "." +
+                String(d.getUTCMonth() + 1).padStart(2, "0") +
+                "." +
+                String(d.getUTCDate()).padStart(2, "0");
+            const fmtLong = (d) =>
+                d.getUTCFullYear() + "년 " + (d.getUTCMonth() + 1) + "월 " + d.getUTCDate() + "일 (토) 추첨";
+            const cls = (n) => "c" + (n <= 10 ? 1 : n <= 20 ? 2 : n <= 30 ? 3 : n <= 40 ? 4 : 5);
+            const ball = (n, sm, extra) =>
+                `<span class="ball ${cls(n)}${sm ? " sm" : ""}${extra ? " " + extra : ""}">${n}</span>`;
+            const ballsHTML = (ns, b, sm) =>
+                ns.map((n) => ball(n, sm)).join("") +
+                (b ? `<span class="plus" aria-label="보너스">+</span>${ball(b, sm)}` : "");
+            const won = (n) => n.toLocaleString("ko-KR") + "원";
+
+            /* ---------- stats ---------- */
+            function stats(range) {
+                const ds = range === "all" ? draws : draws.slice(-range);
+                const L = draws.length;
+                const s = [];
+                for (let i = 0; i <= 45; i++) s.push({ n: i, main: 0, bonus: 0, last: 0 });
+                ds.forEach((d) => {
+                    d.n.forEach((x) => s[x].main++);
+                    s[d.b].bonus++;
+                });
+                draws.forEach((d) => {
+                    d.n.forEach((x) => (s[x].last = d.r));
+                });
+                s.forEach((o) => {
+                    o.total = o.main + o.bonus;
+                    o.rate = ds.length ? o.main / ds.length : 0;
+                    o.gap = o.last ? L - o.last : L;
+                });
+                return { rows: s.slice(1), count: ds.length };
+            }
+
+            /* ---------- generators ---------- */
+            function weightedPick(w) {
+                const pool = [];
+                for (let i = 1; i <= 45; i++) pool.push(i);
+                const out = [];
+                while (out.length < 6) {
+                    let tot = 0;
+                    pool.forEach((n) => (tot += w[n]));
+                    let x = Math.random() * tot,
+                        k = 0;
+                    for (; k < pool.length; k++) {
+                        x -= w[pool[k]];
+                        if (x <= 0) break;
+                    }
+                    if (k >= pool.length) k = pool.length - 1;
+                    out.push(pool.splice(k, 1)[0]);
+                }
+                return out.sort((a, b) => a - b);
+            }
+            function zWeights(vals, k) {
+                const v = vals.slice(1),
+                    m = v.reduce((a, b) => a + b, 0) / 45;
+                const sd = Math.sqrt(v.reduce((a, b) => a + (b - m) * (b - m), 0) / 45) || 1;
+                const w = [0];
+                for (let i = 1; i <= 45; i++) w.push(Math.exp((k * (vals[i] - m)) / sd));
+                return w;
+            }
+            function balanced(set) {
+                const odd = set.filter((x) => x % 2).length,
+                    low = set.filter((x) => x <= 22).length,
+                    sum = set.reduce((a, b) => a + b, 0);
+                let run = 0;
+                for (let i = 1; i < 6; i++) if (set[i] === set[i - 1] + 1) run++;
+                return odd >= 2 && odd <= 4 && low >= 2 && low <= 4 && sum >= 100 && sum <= 175 && run <= 1;
+            }
+            function drawSet(w, mustBalance) {
+                const past = new Set(draws.map((d) => d.n.join(",")));
+                for (let t = 0; t < 500; t++) {
+                    const s = weightedPick(w);
+                    if (past.has(s.join(","))) continue;
+                    if (mustBalance && !balanced(s)) continue;
+                    return s;
+                }
+                return weightedPick(w);
+            }
+            const METHODS = [
+                {
+                    k: "balanced",
+                    t: "균형 분석",
+                    d: "누적·최근 출현과 미출현 기간을 함께 반영하고, 홀짝·고저·합계가 치우치지 않은 조합만 남겨요.",
+                    main: true,
+                },
+                {
+                    k: "freq",
+                    t: "많이 나온 번호",
+                    d: "1회부터 지금까지 당첨번호로 자주 나온 번호일수록 뽑힐 가능성을 높였어요.",
+                },
+                { k: "recent", t: "최근 흐름", d: "최근 50회 동안 자주 나온 번호에 가중치를 줬어요." },
+                {
+                    k: "cold",
+                    t: "오래 안 나온 번호",
+                    d: "마지막으로 나온 뒤 오래 쉬고 있는 번호일수록 가중치를 줬어요.",
+                },
+                { k: "random", t: "완전 무작위", d: "모든 번호를 같은 확률로 뽑아요." },
+            ];
+            let gen = null;
+            function generate() {
+                const all = stats("all").rows,
+                    rec = stats(50).rows;
+                const F = [0],
+                    R = [0],
+                    G = [0];
+                all.forEach((o) => {
+                    F[o.n] = o.main;
+                    G[o.n] = o.gap;
+                });
+                rec.forEach((o) => {
+                    R[o.n] = o.main;
+                });
+                const wF = zWeights(F, 1.2),
+                    wR = zWeights(R, 1.0),
+                    wG = zWeights(
+                        G.map((g) => Math.log(1 + g)),
+                        1.2,
+                    );
+                const wB = [0];
+                for (let i = 1; i <= 45; i++) wB.push(Math.sqrt(wF[i] * wR[i]) + 0.6 * wG[i]);
+                const uni = [0];
+                for (let i = 1; i <= 45; i++) uni.push(1);
+                const avg = (set, arr) => Math.round((set.reduce((a, x) => a + arr[x], 0) / 6) * 10) / 10;
+                const m = (a) => Math.round((a.slice(1).reduce((x, y) => x + y, 0) / 45) * 10) / 10;
+                return {
+                    balanced: drawSet(wB, true),
+                    freq: drawSet(wF, false),
+                    recent: drawSet(wR, false),
+                    cold: drawSet(wG, false),
+                    random: weightedPick(uni),
+                    why: {
+                        balanced: (s) =>
+                            `홀짝 ${s.filter((x) => x % 2).length}:${s.filter((x) => !(x % 2)).length}, 저번호(1~22) ${s.filter((x) => x <= 22).length}개, 합계 ${s.reduce((a, b) => a + b, 0)}`,
+                        freq: (s) => `고른 번호의 평균 누적 출현 ${avg(s, F)}회 (전체 평균 ${m(F)}회)`,
+                        recent: (s) => `고른 번호의 최근 50회 평균 출현 ${avg(s, R)}회 (전체 평균 ${m(R)}회)`,
+                        cold: (s) => `고른 번호의 평균 미출현 ${avg(s, G)}회째 (전체 평균 ${m(G)}회)`,
+                        random: () => `비교용으로 통계를 쓰지 않고 뽑은 번호`,
+                    },
+                };
+            }
+            function renderPredict(regen) {
+                const next = draws.length + 1;
+                $("nextNo").textContent = next;
+                $("nextDate").textContent = fmtLong(dateOf(next));
+                if (regen || !gen) gen = generate();
+                const g = gen;
+                $("heroBalls").innerHTML = g.balanced.map((n) => ball(n)).join("");
+                $("heroMeta").textContent = "균형 분석 · " + g.why.balanced(g.balanced);
+                $("methods").innerHTML = METHODS.map(
+                    (m) => `<div class="method${m.main ? " main" : ""}">
     <div><h3>${m.t}</h3><p>${m.d}</p></div>
-    <div class="balls">${g[m.k].map(n=>ball(n,true)).join("")}</div>
-    <p class="why">${g.why[m.k](g[m.k])}</p></div>`).join("");
-  $("basis").textContent=`1회부터 ${draws.length}회까지 ${draws.length.toLocaleString()}개 회차를 분석했어요. 지난 당첨 조합과 똑같은 번호는 제외해요.`;
-}
-$("regen").addEventListener("click",renderPredict);
+    <div class="balls">${g[m.k].map((n) => ball(n, true)).join("")}</div>
+    <p class="why">${g.why[m.k](g[m.k])}</p>
+    <button class="save" data-k="${m.k}">내 번호에 저장</button></div>`,
+                ).join("");
+                $("basis").textContent =
+                    `1회부터 ${draws.length}회까지 ${draws.length.toLocaleString()}개 회차를 분석했어요. 지난 당첨 조합과 똑같은 번호는 제외해요.`;
+            }
+            $("regen").addEventListener("click", () => {
+                renderPredict(true);
+                $("heroMsg").textContent = "";
+            });
+            async function quickSave(k, msgEl) {
+                if (!canWriteTickets()) {
+                    location.hash = "#mine";
+                    return;
+                }
+                const name = METHODS.find((m) => m.k === k).t;
+                try {
+                    await saveTicket({ r: draws.length + 1, n: gen[k].slice(), src: name });
+                    msgEl.className = "msg";
+                    msgEl.textContent = `${draws.length + 1}회 번호로 저장했어요. 내 번호 탭에서 볼 수 있어요.`;
+                    renderMine();
+                } catch (e) {
+                    msgEl.className = "msg err";
+                    msgEl.textContent = errText(e);
+                }
+            }
+            $("saveHero").addEventListener("click", () => quickSave("balanced", $("heroMsg")));
+            $("methods").addEventListener("click", async (e) => {
+                const b = e.target.closest(".save");
+                if (!b) return;
+                if (!canWriteTickets()) {
+                    location.hash = "#mine";
+                    return;
+                }
+                b.disabled = true;
+                await quickSave(b.dataset.k, $("heroMsg"));
+                b.textContent = "저장했어요";
+            });
 
-/* ---------- rounds ---------- */
-let cur=null,listN=20;
-function showRound(r){
-  r=Math.max(1,Math.min(draws.length,r|0));cur=r;
-  const d=draws[r-1];
-  $("roundInput").value=r;$("roundInput").max=draws.length;
-  $("prevR").disabled=r<=1;$("nextR").disabled=r>=draws.length;
-  $("shown").innerHTML=`<div class="t"><b>${r}회</b><span>${fmt(dateOf(r))} 추첨${d.user?" · 직접 추가":""}</span></div>
-    <div class="balls">${ballsHTML(d.n,d.b)}</div>`;
-}
-function renderList(){
-  const L=draws.length,arr=[];
-  for(let r=L;r>Math.max(0,L-listN);r--){const d=draws[r-1];
-    arr.push(`<button class="row" data-r="${r}"><span class="r">${r}회</span><span class="d">${fmt(dateOf(r))}</span><span class="balls">${ballsHTML(d.n,d.b,true)}</span></button>`);}
-  $("list").innerHTML=arr.join("");
-  $("moreBtn").hidden=listN>=L;
-}
-$("list").addEventListener("click",e=>{const b=e.target.closest(".row");if(b){showRound(+b.dataset.r);$("shown").scrollIntoView({behavior:"smooth",block:"center"});}});
-$("moreBtn").addEventListener("click",()=>{listN+=20;renderList();});
-$("prevR").addEventListener("click",()=>showRound(cur-1));
-$("nextR").addEventListener("click",()=>showRound(cur+1));
-$("goR").addEventListener("click",()=>showRound(+$("roundInput").value));
-$("roundInput").addEventListener("keydown",e=>{if(e.key==="Enter")showRound(+$("roundInput").value);});
+            /* ---------- rounds ---------- */
+            let cur = null,
+                listN = 20;
+            function showRound(r) {
+                r = Math.max(1, Math.min(draws.length, r | 0));
+                cur = r;
+                const d = draws[r - 1];
+                $("roundInput").value = r;
+                $("roundInput").max = draws.length;
+                $("prevR").disabled = r <= 1;
+                $("nextR").disabled = r >= draws.length;
+                $("shown").innerHTML =
+                    `<div class="t"><b>${r}회</b><span>${fmt(dateOf(r))} 추첨${d.user ? " · 직접 등록" : ""}</span></div>
+    <div class="balls">${ballsHTML(d.n, d.b)}</div>`;
+            }
+            function renderList() {
+                const L = draws.length,
+                    arr = [];
+                for (let r = L; r > Math.max(0, L - listN); r--) {
+                    const d = draws[r - 1];
+                    arr.push(
+                        `<button class="row" data-r="${r}"><span class="r">${r}회</span><span class="d">${fmt(dateOf(r))}</span><span class="balls">${ballsHTML(d.n, d.b, true)}</span></button>`,
+                    );
+                }
+                $("list").innerHTML = arr.join("");
+                $("moreBtn").hidden = listN >= L;
+            }
+            $("list").addEventListener("click", (e) => {
+                const b = e.target.closest(".row");
+                if (b) {
+                    showRound(+b.dataset.r);
+                    $("shown").scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+            });
+            $("moreBtn").addEventListener("click", () => {
+                listN += 20;
+                renderList();
+            });
+            $("prevR").addEventListener("click", () => showRound(cur - 1));
+            $("nextR").addEventListener("click", () => showRound(cur + 1));
+            $("goR").addEventListener("click", () => showRound(+$("roundInput").value));
+            $("roundInput").addEventListener("keydown", (e) => {
+                if (e.key === "Enter") showRound(+$("roundInput").value);
+            });
 
-/* add round */
-function renderAdd(){
-  const next=draws.length+1;
-  $("addHint").textContent=`${next}회(${fmt(dateOf(next))}) 추첨 결과가 나오면 당첨번호 6개와 보너스 번호를 입력하세요. 이 브라우저에 저장되고 모든 분석에 바로 반영돼요.`;
-  $("addgrid").innerHTML=[0,1,2,3,4,5].map(i=>`<input type="number" min="1" max="45" inputmode="numeric" aria-label="당첨번호 ${i+1}">`).join("")+`<span class="plus">+</span><input type="number" min="1" max="45" inputmode="numeric" aria-label="보너스 번호">`;
-  $("resetBtn").hidden=!extra.length;
-}
-$("addBtn").addEventListener("click",()=>{
-  const v=[...$("addgrid").querySelectorAll("input")].map(i=>+i.value);
-  const msg=$("addMsg");msg.className="msg err";
-  if(v.some(x=>!Number.isInteger(x)||x<1||x>45)){msg.textContent="1부터 45 사이 숫자 7개를 모두 입력하세요.";return;}
-  if(new Set(v).size!==7){msg.textContent="같은 번호가 두 번 들어갔어요. 7개 번호는 모두 달라야 해요.";return;}
-  const r=draws.length+1;
-  extra.push({r,n:v.slice(0,6),b:v[6]});
-  try{localStorage.setItem(STORE,JSON.stringify(extra));}catch(e){}
-  rebuild();msg.className="msg";msg.textContent=`${r}회 당첨번호를 추가했어요.`;
-  refreshAll();showRound(r);
-});
-$("resetBtn").addEventListener("click",()=>{
-  extra=[];try{localStorage.removeItem(STORE);}catch(e){}
-  rebuild();$("addMsg").className="msg";$("addMsg").textContent="직접 추가한 회차를 지웠어요.";
-  refreshAll();showRound(draws.length);
-});
+            const numInputs = (n, label) =>
+                Array.from(
+                    { length: n },
+                    (_, i) =>
+                        `<input type="number" min="1" max="45" inputmode="numeric" aria-label="${label} ${i + 1}">`,
+                ).join("");
+            function renderAdd() {
+                $("addbox").hidden = !store.isAdmin;
+                if (!store.isAdmin) return;
+                const next = draws.length + 1;
+                $("addHint").textContent =
+                    `${next}회(${fmt(dateOf(next))}) 추첨 결과를 입력하세요.` +
+                    (store.mode === "cloud"
+                        ? " 등록하면 모든 방문자 화면에 반영돼요."
+                        : " 지금은 이 브라우저에만 저장돼요.");
+                if (!$("addgrid").children.length)
+                    $("addgrid").innerHTML =
+                        numInputs(6, "당첨번호") +
+                        `<span class="plus">+</span><input type="number" min="1" max="45" inputmode="numeric" aria-label="보너스 번호">`;
+                const last = draws[draws.length - 1];
+                $("undoBtn").hidden = !(last && last.user);
+                if (last && last.user) $("undoBtn").textContent = `${last.r}회 등록 취소`;
+            }
+            $("addBtn").addEventListener("click", async () => {
+                const inputs = [...$("addgrid").querySelectorAll("input")];
+                const v = inputs.map((i) => +i.value);
+                const msg = $("addMsg");
+                msg.className = "msg err";
+                if (v.some((x) => !Number.isInteger(x) || x < 1 || x > 45)) {
+                    msg.textContent = "1부터 45 사이 숫자 7개를 모두 입력하세요.";
+                    return;
+                }
+                if (new Set(v).size !== 7) {
+                    msg.textContent = "같은 번호가 두 번 들어갔어요. 7개 번호는 모두 달라야 해요.";
+                    return;
+                }
+                const r = draws.length + 1;
+                try {
+                    await saveDraw({ r, n: v.slice(0, 6).sort((a, b) => a - b), b: v[6] });
+                    inputs.forEach((i) => (i.value = ""));
+                    rebuild();
+                    msg.className = "msg";
+                    msg.textContent = `${r}회 당첨번호를 등록했어요.`;
+                    refreshAll(true);
+                    showRound(r);
+                } catch (e) {
+                    msg.textContent = errText(e);
+                }
+            });
+            $("undoBtn").addEventListener("click", async () => {
+                const last = draws[draws.length - 1];
+                if (!last || !last.user) return;
+                if (!confirm(`${last.r}회 당첨번호 등록을 취소할까요?`)) return;
+                try {
+                    await removeDraw(last.r);
+                    rebuild();
+                    $("addMsg").className = "msg";
+                    $("addMsg").textContent = `${last.r}회 등록을 취소했어요.`;
+                    refreshAll(true);
+                    showRound(draws.length);
+                } catch (e) {
+                    $("addMsg").className = "msg err";
+                    $("addMsg").textContent = errText(e);
+                }
+            });
 
-/* ---------- stats table ---------- */
-let range="all",sortK="n",sortDir=1;
-function renderStats(){
-  const {rows,count}=stats(range==="all"?"all":+range);
-  const max=Math.max(...rows.map(o=>o.total));
-  rows.sort((a,b)=>(a[sortK]-b[sortK])*sortDir||a.n-b.n);
-  $("tbody").innerHTML=rows.map(o=>`<tr>
-    <td>${ball(o.n,true)}</td><td>${o.main}</td><td>${o.bonus}</td>
-    <td class="bar"><div class="barcell"><i style="width:${Math.round(o.total/max*80)}px"></i><b>${o.total}</b></div></td>
-    <td>${(o.rate*100).toFixed(1)}%</td><td>${o.last}회</td><td>${o.gap===0?"직전 회차":o.gap+"회째"}</td></tr>`).join("");
-  $("statsLede").textContent=(range==="all"?`1회부터 ${draws.length}회까지 `:`최근 ${count}회(${draws.length-count+1}~${draws.length}회) `)+"각 번호가 당첨번호와 보너스 번호로 나온 횟수예요. 열 제목을 누르면 정렬돼요.";
-  document.querySelectorAll("thead th").forEach(th=>{th.setAttribute("aria-sort",th.dataset.k===sortK?(sortDir>0?"ascending":"descending"):"none");});
-}
-document.querySelector("thead").addEventListener("click",e=>{
-  const th=e.target.closest("th");if(!th)return;
-  const k=th.dataset.k;
-  if(k===sortK)sortDir=-sortDir;else{sortK=k;sortDir=k==="n"?1:-1;}
-  renderStats();
-});
-document.querySelector(".seg").addEventListener("click",e=>{
-  const b=e.target.closest("button");if(!b)return;range=b.dataset.range;
-  document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-pressed",x===b));
-  renderStats();
-});
+            /* ---------- stats table ---------- */
+            let range = "all",
+                sortK = "n",
+                sortDir = 1;
+            function renderStats() {
+                const { rows, count } = stats(range === "all" ? "all" : +range);
+                const max = Math.max(...rows.map((o) => o.total));
+                rows.sort((a, b) => (a[sortK] - b[sortK]) * sortDir || a.n - b.n);
+                $("tbody").innerHTML = rows
+                    .map(
+                        (o) => `<tr>
+    <td>${ball(o.n, true)}</td><td>${o.main}</td><td>${o.bonus}</td>
+    <td class="bar"><div class="barcell"><i style="width:${Math.round((o.total / max) * 80)}px"></i><b>${o.total}</b></div></td>
+    <td>${(o.rate * 100).toFixed(1)}%</td><td>${o.last}회</td><td>${o.gap === 0 ? "직전 회차" : o.gap + "회째"}</td></tr>`,
+                    )
+                    .join("");
+                $("statsLede").textContent =
+                    (range === "all"
+                        ? `1회부터 ${draws.length}회까지 `
+                        : `최근 ${count}회(${draws.length - count + 1}~${draws.length}회) `) +
+                    "각 번호가 당첨번호와 보너스 번호로 나온 횟수예요. 열 제목을 누르면 정렬돼요.";
+                document.querySelectorAll("thead th").forEach((th) => {
+                    th.setAttribute(
+                        "aria-sort",
+                        th.dataset.k === sortK ? (sortDir > 0 ? "ascending" : "descending") : "none",
+                    );
+                });
+            }
+            document.querySelector("thead").addEventListener("click", (e) => {
+                const th = e.target.closest("th");
+                if (!th) return;
+                const k = th.dataset.k;
+                if (k === sortK) sortDir = -sortDir;
+                else {
+                    sortK = k;
+                    sortDir = k === "n" ? 1 : -1;
+                }
+                renderStats();
+            });
+            document.querySelector(".seg").addEventListener("click", (e) => {
+                const b = e.target.closest("button");
+                if (!b) return;
+                range = b.dataset.range;
+                document.querySelectorAll(".seg button").forEach((x) => x.setAttribute("aria-pressed", x === b));
+                renderStats();
+            });
 
-/* ---------- views ---------- */
-const VIEWS=["predict","rounds","stats"];
-function route(){
-  const v=VIEWS.includes(location.hash.slice(1))?location.hash.slice(1):"predict";
-  VIEWS.forEach(x=>{$("v-"+x).hidden=x!==v;});
-  document.querySelectorAll("nav.tabs a").forEach(a=>{if(a.dataset.view===v)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current");});
-}
-window.addEventListener("hashchange",route);
+            /* ---------- my numbers ---------- */
+            function rankOf(t, d) {
+                const m = t.n.filter((x) => d.n.includes(x)).length,
+                    bon = t.n.includes(d.b);
+                if (m === 6) return 1;
+                if (m === 5 && bon) return 2;
+                if (m === 5) return 3;
+                if (m === 4) return 4;
+                if (m === 3) return 5;
+                return 0;
+            }
+            function renderAccount() {
+                const el = $("account");
+                if (store.mode === "local") {
+                    el.innerHTML = `<span class="who">지금은 <b>이 브라우저에만</b> 저장돼요. 관리자가 Firebase를 연결하면 구글 로그인으로 어디서든 볼 수 있어요.</span>`;
+                } else if (!store.ready) {
+                    el.innerHTML = `<span class="who">저장소에 연결하는 중이에요.</span>`;
+                } else if (store.mode === "error") {
+                    el.innerHTML = `<span class="who">저장소에 연결하지 못했어요. 인터넷 연결을 확인하고 새로고침하세요.</span>`;
+                } else if (!store.user) {
+                    el.innerHTML = `<span class="who">구글 계정으로 로그인하면 기록이 내 계정에 저장돼서 PC와 휴대폰 어디서든 볼 수 있어요.</span><button class="btn" id="loginBtn">구글로 로그인</button>`;
+                    $("loginBtn").onclick = signIn;
+                } else {
+                    el.innerHTML = `<span class="who"><b>${escapeHTML(store.user.displayName || store.user.email || "")}</b> 계정에 저장 중${store.isAdmin ? " · 관리자" : ""}</span><button class="btn ghost" id="logoutBtn">로그아웃</button>`;
+                    $("logoutBtn").onclick = signOutNow;
+                }
+                $("mineBody").hidden = !canWriteTickets();
+            }
+            const escapeHTML = (s) =>
+                String(s).replace(
+                    /[&<>"']/g,
+                    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c],
+                );
+            function renderMine() {
+                renderAccount();
+                if (!canWriteTickets()) return;
+                if (!$("tgrid").children.length) $("tgrid").innerHTML = numInputs(6, "내 번호");
+                if (!$("tRound").value) $("tRound").value = draws.length + 1;
+                const L = draws.length;
+                let games = tickets.length,
+                    wins = 0,
+                    fixed = 0,
+                    pending = 0;
+                const groups = {};
+                tickets.forEach((t) => {
+                    (groups[t.r] = groups[t.r] || []).push(t);
+                });
+                Object.values(groups).forEach((g) => g.sort((a, b) => a.at - b.at));
+                tickets.forEach((t) => {
+                    if (t.r > L) {
+                        pending++;
+                        return;
+                    }
+                    const k = rankOf(t, draws[t.r - 1]);
+                    if (k) {
+                        wins++;
+                        if (k === 4) fixed += 50000;
+                        if (k === 5) fixed += 5000;
+                    }
+                });
+                $("tSummary").innerHTML = games
+                    ? `<div><b>${games}</b>게임 · ${won(games * 1000)}</div><div><b>${wins}</b>게임 당첨</div><div><b>${pending}</b>게임 추첨 대기</div>${fixed ? `<div><b>${won(fixed)}</b>4·5등 고정 당첨금</div>` : ""}`
+                    : "";
+                const rounds = Object.keys(groups)
+                    .map(Number)
+                    .sort((a, b) => b - a);
+                if (!rounds.length) {
+                    $("tList").innerHTML =
+                        `<p class="empty">아직 기록한 번호가 없어요. 위에서 번호를 입력하거나, 예상 번호 탭에서 마음에 드는 번호를 저장해 보세요.</p>`;
+                    return;
+                }
+                $("tList").innerHTML = rounds
+                    .map((r) => {
+                        const d = r <= L ? draws[r - 1] : null;
+                        const head = `<h3>${r}회 <span>${fmt(dateOf(r))} 추첨${d ? "" : " · 추첨 전"}</span></h3>`;
+                        const winRow = d
+                            ? `<div class="ticket"><span class="pill">당첨번호</span><span class="balls">${ballsHTML(d.n, d.b, true)}</span></div>`
+                            : "";
+                        const rows = groups[r]
+                            .map((t) => {
+                                let balls, badge;
+                                if (d) {
+                                    const k = rankOf(t, d);
+                                    balls = t.n
+                                        .map((x) =>
+                                            d.n.includes(x)
+                                                ? ball(x, true)
+                                                : ball(x, true, k === 2 && x === d.b ? "bon" : "miss"),
+                                        )
+                                        .join("");
+                                    badge = `<span class="rank${k ? " win" : ""}">${k ? k + "등" : "낙첨"}</span>`;
+                                } else {
+                                    balls = t.n.map((x) => ball(x, true)).join("");
+                                    badge = `<span class="rank">대기</span>`;
+                                }
+                                return `<div class="ticket">${badge}<span class="balls">${balls}</span>${t.src ? `<span class="pill">${escapeHTML(t.src)}</span>` : ""}<button class="del" data-id="${t.id}">삭제</button></div>`;
+                            })
+                            .join("");
+                        return `<div class="tgroup">${head}${winRow}${rows}</div>`;
+                    })
+                    .join("");
+            }
+            $("tSave").addEventListener("click", async () => {
+                const msg = $("tMsg");
+                msg.className = "msg err";
+                const r = +$("tRound").value;
+                const inputs = [...$("tgrid").querySelectorAll("input")];
+                const v = inputs.map((i) => +i.value);
+                if (!Number.isInteger(r) || r < 1 || r > draws.length + 1) {
+                    msg.textContent = `회차는 1부터 ${draws.length + 1}까지 입력할 수 있어요.`;
+                    return;
+                }
+                if (v.some((x) => !Number.isInteger(x) || x < 1 || x > 45)) {
+                    msg.textContent = "1부터 45 사이 숫자 6개를 모두 입력하세요.";
+                    return;
+                }
+                if (new Set(v).size !== 6) {
+                    msg.textContent = "같은 번호가 두 번 들어갔어요.";
+                    return;
+                }
+                try {
+                    await saveTicket({ r, n: v.sort((a, b) => a - b), src: "직접 입력" });
+                    inputs.forEach((i) => (i.value = ""));
+                    inputs[0].focus();
+                    msg.className = "msg";
+                    msg.textContent = `${r}회 번호를 저장했어요.`;
+                    renderMine();
+                } catch (e) {
+                    msg.textContent = errText(e);
+                }
+            });
+            $("tList").addEventListener("click", async (e) => {
+                const b = e.target.closest(".del");
+                if (!b) return;
+                if (!confirm("이 번호 기록을 삭제할까요?")) return;
+                try {
+                    await removeTicket(b.dataset.id);
+                    renderMine();
+                } catch (err) {
+                    $("tMsg").className = "msg err";
+                    $("tMsg").textContent = errText(err);
+                }
+            });
 
-function refreshAll(){
-  renderPredict();renderList();renderAdd();renderStats();
-  $("source").textContent=`데이터: 동행복권 공식 당첨번호 1~${BASE_LAST}회 (${fmt(dateOf(BASE_LAST))} 추첨까지)`+(extra.length?`, 직접 추가 ${extra.length}개 회차`:"")+".";
-}
-refreshAll();showRound(draws.length);route();
-})();
-</script>
-</body>
+            /* ---------- views ---------- */
+            const VIEWS = ["predict", "rounds", "stats", "mine"];
+            function route() {
+                const v = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : "predict";
+                VIEWS.forEach((x) => {
+                    $("v-" + x).hidden = x !== v;
+                });
+                document.querySelectorAll("nav.tabs a").forEach((a) => {
+                    if (a.dataset.view === v) a.setAttribute("aria-current", "page");
+                    else a.removeAttribute("aria-current");
+                });
+            }
+            window.addEventListener("hashchange", route);
+
+            function refreshAll(regen) {
+                renderPredict(regen);
+                renderList();
+                renderAdd();
+                renderStats();
+                renderMine();
+                const extra = draws.length - BASE_LAST;
+                $("source").textContent =
+                    `데이터: 동행복권 공식 당첨번호 1~${BASE_LAST}회 (${fmt(dateOf(BASE_LAST))} 추첨까지)` +
+                    (extra > 0 ? `, 이후 ${extra}개 회차는 직접 등록` : "") +
+                    ".";
+            }
+
+            rebuild();
+            refreshAll();
+            showRound(draws.length);
+            route();
+            initStore().then(() => {
+                rebuild();
+                refreshAll(true);
+                showRound(draws.length);
+            });
+        </script>
+    </body>
 </html>
