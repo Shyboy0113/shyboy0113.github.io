@@ -22,7 +22,7 @@ jobs:
 
       - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 24
 
       - name: 당첨번호 받기
         run: node .github/scripts/update-lotto.mjs
