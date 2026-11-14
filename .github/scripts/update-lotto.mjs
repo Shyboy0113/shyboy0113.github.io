@@ -32,7 +32,8 @@ const expectedLatest = Math.floor((Date.now() - FIRST - 12 * 3600e3) / WEEK) + 1
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 async function fetchRound(r) {
-  const url = `https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=${r}`;
+  // 2026년 동행복권 사이트 개편으로 바뀐 엔드포인트. 요청한 회차 주변 10회차를 한 번에 돌려줍니다.
+  const url = `https://www.dhlottery.co.kr/lt645/selectPstLt645InfoNew.do?srchDir=center&srchLtEpsd=${r}`;
   let lastErr;
   for (let attempt = 1; attempt <= 3; attempt++) {
     try {
@@ -40,20 +41,24 @@ async function fetchRound(r) {
         headers: {
           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
           "Accept": "application/json, text/javascript, */*; q=0.01",
-          "Referer": "https://www.dhlottery.co.kr/",
+          "X-Requested-With": "XMLHttpRequest",
+          "Referer": `https://www.dhlottery.co.kr/lt645/result?ltEpsd=${r}`,
         },
       });
       const text = await res.text();
       let j;
       try { j = JSON.parse(text); }
       catch { throw new Error(`JSON이 아닌 응답 (HTTP ${res.status}): ${text.slice(0, 150).replace(/\s+/g, " ")}`); }
-      if (j.returnValue !== "success") return null; // 아직 추첨 전
-      const n = [1, 2, 3, 4, 5, 6].map(i => +j["drwtNo" + i]).sort((a, b) => a - b);
-      const b = +j.bnusNo;
+      const row = (j && j.data && Array.isArray(j.data.list) ? j.data.list : []).find(x => +x.ltEpsd === r);
+      if (!row) return null; // 아직 추첨 전
+      const n = [1, 2, 3, 4, 5, 6].map(i => +row[`tm${i}WnNo`]).sort((a, b) => a - b);
+      const b = +row.bnsWnNo;
       const all = [...n, b];
       if (all.some(x => !Number.isInteger(x) || x < 1 || x > 45) || new Set(all).size !== 7)
-        throw new Error(`이상한 번호: ${JSON.stringify(j)}`);
-      return { r, n, b, date: j.drwNoDate || null };
+        throw new Error(`이상한 번호: ${JSON.stringify(row)}`);
+      const ymd = String(row.ltRflYmd || "");
+      const date = /^\d{8}$/.test(ymd) ? `${ymd.slice(0, 4)}-${ymd.slice(4, 6)}-${ymd.slice(6)}` : null;
+      return { r, n, b, date };
     } catch (e) {
       lastErr = e;
       console.warn(`${r}회 시도 ${attempt} 실패: ${e.message}`);
