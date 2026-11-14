@@ -398,10 +398,24 @@ const errText=e=>(e&&e.code==="permission-denied")?"저장 권한이 없어요. 
 
 /* ---------- draws ---------- */
 let draws=[];
+/* 자동 갱신: GitHub Actions가 매주 동행복권에서 받아 저장하는 파일 */
+const AUTO_URL="/lotto6_korea/draws.json";
+let autoDraws=[];
+async function loadAutoDraws(){
+  try{
+    const res=await fetch(AUTO_URL+"?t="+Date.now(),{cache:"no-store"});
+    if(!res.ok)return;
+    const j=await res.json();
+    autoDraws=(Array.isArray(j)?j:[]).filter(d=>d&&Number.isInteger(d.r)&&Array.isArray(d.n)&&d.n.length===6&&Number.isInteger(d.b));
+  }catch(e){console.warn("draws.json을 불러오지 못했어요",e);}
+}
 function rebuild(){
   draws=base.slice();
-  extraDraws.slice().sort((x,y)=>x.r-y.r).forEach(d=>{
-    if(d.r===draws.length+1)draws.push({r:d.r,n:d.n.slice().sort((a,b)=>a-b),b:d.b,user:true});
+  const byR=new Map();
+  extraDraws.forEach(d=>byR.set(d.r,{n:d.n,b:d.b,user:true}));
+  autoDraws.forEach(d=>byR.set(d.r,{n:d.n,b:d.b,user:false})); // 공식 데이터가 직접 등록보다 우선
+  [...byR.keys()].sort((a,b)=>a-b).forEach(r=>{
+    if(r===draws.length+1){const d=byR.get(r);draws.push({r,n:d.n.slice().sort((a,b)=>a-b),b:d.b,user:d.user});}
   });
 }
 
@@ -699,11 +713,12 @@ window.addEventListener("hashchange",route);
 
 function refreshAll(){
   renderPredict(false);renderList();renderAdd();renderStats();renderMine();
-  const extra=draws.length-BASE_LAST;
-  $("source").textContent=`데이터: 동행복권 공식 당첨번호 1~${BASE_LAST}회 (${fmt(dateOf(BASE_LAST))} 추첨까지)`+(extra>0?`, 이후 ${extra}개 회차는 직접 등록`:"")+".";
+  const manual=draws.filter(d=>d.user).length, L=draws.length;
+  $("source").textContent=`데이터: 동행복권 공식 당첨번호 1~${L}회 (${fmt(dateOf(L))} 추첨까지)`+(manual>0?`, 이 중 ${manual}개 회차는 직접 등록`:"")+".";
 }
 
 rebuild();refreshAll();showRound(draws.length);route();
+loadAutoDraws().then(()=>{rebuild();refreshAll();showRound(draws.length);});
 initStore().then(()=>{rebuild();refreshAll();showRound(draws.length);});
 </script>
 </body>
